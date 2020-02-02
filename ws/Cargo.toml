@@ -1,0 +1,13 @@
+[package]
+name = "wasm-svg-ws"
+description = "My super awesome Rust & WebAssembly project addressing SVG!"
+version = "0.1.0"
+authors = ["Tobias Mucke <tobias.mucke@gmail.com"]
+categories = ["wasm"]
+readme = "README.md"
+edition = "2018"
+
+[dependencies]
+actix-web = "~2"
+actix-rt = "~1"
+actix-files = "^0.2"

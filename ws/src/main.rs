@@ -10,6 +10,7 @@ async fn main() -> std::io::Result<()> {
   HttpServer::new(|| {
     App::new()
       .service(Files::new("/static", "static"))
+      .service(Files::new("/pkg", "lib/pkg"))
       .route("/", web::get().to(index))
   })
     .bind("127.0.0.1:8080")

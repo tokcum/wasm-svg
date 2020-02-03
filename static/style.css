@@ -1,0 +1,8 @@
+/* Works as soon as there is something in SVG element */
+svg {
+  border: 1px solid black;
+}
+
+#test {
+  fill: blue;
+}

@@ -21,6 +21,23 @@ impl D3 {
   }
 }
 
+struct Element {
+  element: web_sys::Element,
+}
+
+impl Element {
+  fn new(node: &str) -> Element {
+    let d3 = D3::new();
+    let e = d3.document.create_element_ns(Some("http://www.w3.org/2000/svg"), node).unwrap();
+    
+    Element { element: e }
+  }
+  
+  fn attr(&mut self, name: &str, value: &str) -> &mut Element {
+    self.element.set_attribute(name, value);
+    self
+  }
+}
 
 #[wasm_bindgen]
 pub fn hello(name: String) -> String {
@@ -54,34 +71,37 @@ pub fn nameit(selector: &str) -> Result<web_sys::Element, JsValue> {
 }
 
 #[wasm_bindgen]
-pub fn append(selector: &str, element: &str) -> Result<web_sys::Element, JsValue> {
+pub fn append_svg(selector: &str, element: &str) -> Result<web_sys::Element, JsValue> {
   let d3 = D3::new();
   let body = d3.document.body().expect("document expect to have have a body");
   
-  let svg = d3.document.create_element_ns(Some("http://www.w3.org/2000/svg"), "svg")?;
-  svg.set_attribute("width", "300");
-  svg.set_attribute("height", "300");
+  let mut svg = Element::new("svg");
+  svg.attr("width", "300").attr("height", "300");
   
-  let rect1 = d3.document.create_element_ns(Some("http://www.w3.org/2000/svg"), "rect")?;
-  rect1.set_attribute("x", "1.0");
-  rect1.set_attribute("y", "1.0");
-  rect1.set_attribute("width", "150.0");
-  rect1.set_attribute("height", "150.0");
-  rect1.set_attribute("class", "rect");
-  rect1.set_id("rect1");
+  body.append_child(&svg.element)?;
   
-  let rect2 = d3.document.create_element_ns(Some("http://www.w3.org/2000/svg"), "rect")?;
-  rect2.set_attribute("x", "21.0");
-  rect2.set_attribute("y", "21.0");
-  rect2.set_attribute("width", "50.0");
-  rect2.set_attribute("height", "50.0");
-  rect2.set_attribute("class", "rect");
-  rect2.set_id("rect2");
+  Ok(svg.element)
+}
+
+#[wasm_bindgen]
+pub fn append_rect(selector: &str, element: &str) -> Result<web_sys::Element, JsValue> {
+  let d3 = D3::new();
+  let el = d3.select(selector).unwrap();
   
+  let mut rect = Element::new("rect");
+  rect.attr("x", "1.0").attr("y", "1.0").attr("width", "150.0").attr("height", "150.0").attr("class", "rect").attr("id", "rect");
+  el.append_child(&rect.element)?;
   
-  svg.append_child(&rect1)?;
-  svg.append_child(&rect2)?;
-  body.append_child(&svg)?;
+  Ok(rect.element)
+}
+
+#[wasm_bindgen]
+pub fn move_rect(selector: &str, element: &str) -> Result<web_sys::Element, JsValue> {
+  let d3 = D3::new();
+  let el = d3.select(selector).unwrap();
   
-  Ok(rect2)
+  el.set_attribute("x", "30.0");
+  el.set_attribute("y", "30.0");
+  
+  Ok(el)
 }

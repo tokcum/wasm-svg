@@ -1434,6 +1434,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "wasm-svg"
+version = "0.1.0"
+
+[[package]]
 name = "wasm-svg-examples-simple"
 version = "0.1.0"
 dependencies = [

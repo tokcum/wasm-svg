@@ -13,6 +13,13 @@ My super awesome Rust & WebAssembly project addressing SVG!
 """
 edition = "2018"
 
+[lib]
+path = "lib"
+
+[[bin]]
+path = "ws"
+name = "ws"
+
 [workspace]
 members = [
     "examples/simple",

@@ -15,9 +15,10 @@ impl D3 {
     D3 { document: d }
   }
   
-  pub fn select(&self, s: &str) -> Result<web_sys::Element, JsValue> {
-    let el = self.document.query_selector(s)?.unwrap();
-    Ok(el)
+  pub fn select(&self, s: &str) -> Option<Element> {
+    let mut e = Element::create();
+    e.element = self.document.query_selector(s).unwrap().unwrap();
+    Some(e)
   }
 }
 
@@ -26,6 +27,11 @@ pub struct Element {
 }
 
 impl Element {
+  fn create() -> Element {
+    let d3 = D3::new();
+    Element { element: d3.document.create_element("none").unwrap() }
+  }
+  
   pub fn new(node: &str) -> Element {
     let d3 = D3::new();
     let e = d3.document.create_element_ns(Some("http://www.w3.org/2000/svg"), node).unwrap();

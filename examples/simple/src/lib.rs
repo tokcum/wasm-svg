@@ -26,10 +26,10 @@ pub fn run() -> Result<(), JsValue> {
 #[wasm_bindgen]
 pub fn nameit(selector: &str) -> Result<web_sys::Element, JsValue> {
   let d3 = D3::new();
-  let el = d3.select(selector)?;
+  let el = d3.select(selector).unwrap();
   //let el = d3.query_selector(selector)?.unwrap();
-  el.set_inner_html("Test4");
-  Ok(el)
+  el.element.set_inner_html("Test4");
+  Ok(el.element)
 }
 
 #[wasm_bindgen]
@@ -52,7 +52,7 @@ pub fn append_rect(selector: &str, element: &str) -> Result<web_sys::Element, Js
   
   let mut rect = Element::new("rect");
   rect.attr("x", "1.0").attr("y", "1.0").attr("width", "150.0").attr("height", "150.0").attr("class", "rect").attr("id", "rect");
-  el.append_child(&rect.element)?;
+  el.element.append_child(&rect.element)?;
   
   Ok(rect.element)
 }
@@ -62,8 +62,8 @@ pub fn move_rect(selector: &str, element: &str) -> Result<web_sys::Element, JsVa
   let d3 = D3::new();
   let el = d3.select(selector).unwrap();
   
-  el.set_attribute("x", "30.0");
-  el.set_attribute("y", "30.0");
+  el.element.set_attribute("x", "30.0");
+  el.element.set_attribute("y", "30.0");
   
-  Ok(el)
+  Ok(el.element)
 }

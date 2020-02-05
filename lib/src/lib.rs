@@ -1,5 +1,28 @@
 use wasm_bindgen::prelude::*;
 
+//Using the Newtype Pattern to Implement External Traits on External Types
+//https://doc.rust-lang.org/book/ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
+
+pub struct Document(web_sys::Document);
+pub struct ElementNG(web_sys::Element);
+pub struct Selection(Vec<ElementNG>);
+
+pub trait Select {
+  fn select(&self, s: &str) -> Option<ElementNG>;
+  fn select_all(&self, s: &str) -> Option<Selection>;
+}
+
+impl Select for Document {
+  fn select (&self, s: &str) -> Option<ElementNG> {
+    None
+  }
+  
+  fn select_all (&self, s: &str) -> Option<Selection> {
+    None
+  }
+}
+
+
 // Homage to D3.js, Data-Driven Documents
 pub struct D3 {
   pub document: web_sys::Document,

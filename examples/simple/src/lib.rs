@@ -10,60 +10,54 @@ pub fn hello(name: String) -> String {
 // Called by our JS entry point to run the example
 #[wasm_bindgen]
 pub fn run() -> Result<(), JsValue> {
-  let d3 = D3::new();
-  let body = d3.document.body().expect("document should have a body");
+  let d = Document::new();
+  let body = d.select("body").expect("document should have a body");
   
-  // Manufacture the element we're gonna append
-  let val = d3.document.create_element("p")?;
-  val.set_inner_html("Hello from Rust!");
-  
-  body.append_child(&val)?;
+  body.append("p").unwrap().html("Hello from Rust!");
   
   Ok(())
 }
 
 // Called by our JS entry point to run the example
 #[wasm_bindgen]
-pub fn nameit(selector: &str) -> Result<web_sys::Element, JsValue> {
-  let d3 = D3::new();
-  let el = d3.select(selector).unwrap();
-  //let el = d3.query_selector(selector)?.unwrap();
-  el.element.set_inner_html("Test4");
-  Ok(el.element)
+pub fn nameit(selector: &str) -> Result<(), JsValue> {
+  let d = Document::new();
+  let el = d.select(selector).unwrap();
+
+  el.html("Test4");
+  
+  Ok(())
 }
 
 #[wasm_bindgen]
-pub fn append_svg(selector: &str, element: &str) -> Result<web_sys::Element, JsValue> {
-  let d3 = D3::new();
-  let body = d3.document.body().expect("document expect to have have a body");
+pub fn append_svg(selector: &str, element: &str) -> Result<(), JsValue> {
+  let d = Document::new();
+  let body = d.select("body").expect("document expect to have have a body");
   
-  let mut svg = Element::new("svg");
-  svg.attr("width", "300").attr("height", "300");
+  body.append_svg("svg").unwrap().attr("width", "300").attr("height", "300");
   
-  body.append_child(&svg.element)?;
-  
-  Ok(svg.element)
+  Ok(())
 }
 
 #[wasm_bindgen]
-pub fn append_rect(selector: &str, element: &str) -> Result<web_sys::Element, JsValue> {
-  let d3 = D3::new();
-  let el = d3.select(selector).unwrap();
+pub fn append_rect(selector: &str, element: &str) -> Result<(), JsValue> {
+  let d = Document::new();
+  let el = d.select(selector).unwrap();
   
   let mut rect = Element::new("rect");
-  rect.attr("x", "1.0").attr("y", "1.0").attr("width", "150.0").attr("height", "150.0").attr("class", "rect").attr("id", "rect");
-  el.element.append_child(&rect.element)?;
+  el.append("rect").unwrap().attr("x", "1.0").attr("y", "1.0").attr("width", "150.0")
+    .attr("height", "150.0").attr("class", "rect").attr("id", "rect");
   
-  Ok(rect.element)
+  Ok(())
 }
 
 #[wasm_bindgen]
-pub fn move_rect(selector: &str, element: &str) -> Result<web_sys::Element, JsValue> {
-  let d3 = D3::new();
-  let el = d3.select(selector).unwrap();
+pub fn move_rect(selector: &str, element: &str) -> Result<(), JsValue> {
+  let d = Document::new();
+  let mut el = d.select(selector).unwrap();
   
-  el.element.set_attribute("x", "30.0");
-  el.element.set_attribute("y", "30.0");
+  el.attr("x", "30.0")
+    .attr("y", "30.0");
   
-  Ok(el.element)
+  Ok(())
 }

@@ -9,7 +9,7 @@ async fn index() -> impl Responder {
 async fn main() -> std::io::Result<()> {
   HttpServer::new(|| {
     App::new()
-      .service(Files::new("/static", "static"))
+      .service(Files::new("/static", "static").show_files_listing())
       .service(Files::new("/pkg", "lib/pkg"))
       .service(Files::new("/examples/simple/static", "examples/simple/static"))
       .service(Files::new("/examples/simple/pkg", "examples/simple/pkg"))

@@ -1,69 +1,87 @@
-use wasm_bindgen::prelude::*;
+use wasm_bindgen::JsCast;
 
 //Using the Newtype Pattern to Implement External Traits on External Types
 //https://doc.rust-lang.org/book/ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
 
 pub struct Document(web_sys::Document);
-pub struct ElementNG(web_sys::Element);
-pub struct Selection(Vec<ElementNG>);
 
-pub trait Select {
-  fn select(&self, s: &str) -> Option<ElementNG>;
-  fn select_all(&self, s: &str) -> Option<Selection>;
-}
-
-impl Select for Document {
-  fn select (&self, s: &str) -> Option<ElementNG> {
-    None
-  }
-  
-  fn select_all (&self, s: &str) -> Option<Selection> {
-    None
-  }
-}
-
-
-// Homage to D3.js, Data-Driven Documents
-pub struct D3 {
-  pub document: web_sys::Document,
-}
-
-impl D3 {
-  pub fn new() -> D3 {
-    // Use `web_sys`'s global `window` function to get a handle on the global
-    // window object.
+impl Document {
+  pub fn new() -> Document {
     let w = web_sys::window().expect("no global `window` exists");
     let d = w.document().expect("should have a document on window");
-  
-    D3 { document: d }
-  }
-  
-  pub fn select(&self, s: &str) -> Option<Element> {
-    let mut e = Element::create();
-    e.element = self.document.query_selector(s).unwrap().unwrap();
-    Some(e)
+    Document(d)
   }
 }
 
-pub struct Element {
-  pub element: web_sys::Element,
+pub struct Node(web_sys::Node);
+
+impl Node {
+  pub fn from(n: web_sys::Node) -> Node {
+    Node(n)
+  }
 }
+
+pub struct Element(web_sys::Element);
 
 impl Element {
   fn create() -> Element {
-    let d3 = D3::new();
-    Element { element: d3.document.create_element("none").unwrap() }
+    let d = Document::new();
+    Element(d.0.create_element("none").unwrap())
   }
   
   pub fn new(node: &str) -> Element {
-    let d3 = D3::new();
-    let e = d3.document.create_element_ns(Some("http://www.w3.org/2000/svg"), node).unwrap();
+    let d = Document::new();
+    Element(d.0.create_element_ns(Some("http://www.w3.org/2000/svg"), node).unwrap())
+  }
+  
+  pub fn new_svg() -> Element {
+    let d = Document::new();
+    Element(d.0.create_element_ns(Some("http://www.w3.org/2000/svg"), "svg").unwrap())
+  }
+  
+  pub fn append_svg(&self, s: &str) -> Option<Element> {
+    let e = Element::new_svg();
     
-    Element { element: e }
+    Some(Element::from(self.0.append_child(&e.0).unwrap().dyn_into::< web_sys::Element >().unwrap()))
   }
   
   pub fn attr(&mut self, name: &str, value: &str) -> &mut Element {
-    self.element.set_attribute(name, value);
+    self.0.set_attribute(name, value);
     self
+  }
+  
+  pub fn from(e: web_sys::Element) -> Element {
+    Element(e)
+  }
+  
+  pub fn html(&self, s: &str) {
+    self.0.set_inner_html(s);
+  }
+}
+
+pub trait Selection {
+  fn select(&self, s: &str) -> Option<Element>;
+  fn append(&self, s: &str) -> Option<Element>;
+}
+
+impl Selection for Document {
+  fn select (&self, s: &str) -> Option<Element> {
+    Some(Element::from(self.0.query_selector(s).unwrap().unwrap()))
+  }
+  fn append(&self, s: &str) -> Option<Element> {
+    let e = Element::new(s);
+    
+    Some(Element::from(self.0.append_child(&e.0).unwrap().dyn_into::< web_sys::Element >().unwrap()))
+  }
+}
+
+impl Selection for Element {
+  fn select (&self, s: &str) -> Option<Element> {
+    Some(Element::from(self.0.query_selector(s).unwrap().unwrap()))
+  }
+  fn append(&self, s: &str) -> Option<Element> {
+    let e = Element::new(s);
+    
+    Some(Element::from(self.0.append_child(&e.0).unwrap().dyn_into::< web_sys::Element >().unwrap()))
   }
 }

@@ -1,5 +1,8 @@
 use wasm_bindgen::prelude::*;
-use wasm_svg_lib::*;
+use wasm_svg_lib::document::*;
+use wasm_svg_lib::element::*;
+use wasm_svg_lib::node::*;
+use wasm_svg_lib::Selection;
 
 #[wasm_bindgen]
 pub fn hello(name: String) -> String {

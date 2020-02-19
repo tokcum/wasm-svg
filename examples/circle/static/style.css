@@ -1,0 +1,12 @@
+/* Works as soon as there is something in SVG element */
+svg {
+  border: 1px solid black;
+}
+
+.rect {
+  fill-opacity: 0.3;
+}
+
+#rect {
+  fill: green;
+}

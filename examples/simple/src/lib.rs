@@ -1,7 +1,5 @@
 use wasm_bindgen::prelude::*;
 use wasm_svg_lib::document::*;
-use wasm_svg_lib::element::*;
-use wasm_svg_lib::node::*;
 use wasm_svg_lib::Selection;
 
 #[wasm_bindgen]
@@ -33,21 +31,20 @@ pub fn nameit(selector: &str) -> Result<(), JsValue> {
 }
 
 #[wasm_bindgen]
-pub fn append_svg(selector: &str, element: &str) -> Result<(), JsValue> {
+pub fn append_svg() -> Result<(), JsValue> {
   let d = Document::new();
   let body = d.select("body").expect("document expect to have have a body");
   
-  body.append_svg("svg").unwrap().attr("width", "300").attr("height", "300");
+  body.append_svg().unwrap().attr("width", "300").attr("height", "300");
   
   Ok(())
 }
 
 #[wasm_bindgen]
-pub fn append_rect(selector: &str, element: &str) -> Result<(), JsValue> {
+pub fn append_rect(selector: &str) -> Result<(), JsValue> {
   let d = Document::new();
   let el = d.select(selector).unwrap();
   
-  let mut rect = Element::new("rect");
   el.append("rect").unwrap().attr("x", "1.0").attr("y", "1.0").attr("width", "150.0")
     .attr("height", "150.0").attr("class", "rect").attr("id", "rect");
   
@@ -55,7 +52,7 @@ pub fn append_rect(selector: &str, element: &str) -> Result<(), JsValue> {
 }
 
 #[wasm_bindgen]
-pub fn move_rect(selector: &str, element: &str) -> Result<(), JsValue> {
+pub fn move_rect(selector: &str) -> Result<(), JsValue> {
   let d = Document::new();
   let mut el = d.select(selector).unwrap();
   

@@ -1,6 +1,7 @@
 use wasm_bindgen::JsCast;
 
 use crate::document::*;
+use wasm_bindgen::__rt::core::f64::consts::PI;
 
 pub struct Element(pub web_sys::Element);
 
@@ -63,4 +64,19 @@ impl super::Selection for Element {
 
         Some(Element::from(self.0.append_child(&e.0).unwrap().dyn_into::< web_sys::Element >().unwrap()))
     }
+}
+
+pub fn arc(cx: f32, cy: f32, r: f32, b: f32) -> String {
+    format!("M {},{} m 0,{} v {} a {},{} 0 0,0 {},{} h {} a {},{} 0 0,1 {},{} Z", cx, cy, -(r-b), -b, r, r, -r, r, b, r-b, r-b, r-b, -(r-b))
+}
+
+pub fn arc_alpha(cx: f64, cy: f64, r: f64, b: f64, a: f64) -> String {
+    //f.attr("d", arc_alpha(250.0, 250.0, 100.0, 3.0, 45.0).as_str())
+    //(a.cos()*(cx+r))-(cx+r)
+    //(-1.0 * w.sin()*(cy))+(cy)
+    
+    // Rust calculates in Radiant not Gradiant
+    let w = a/360.0 * 2.0 * PI;
+    
+    format!("M {},{} l {},{} h {} a {},{} 0 0,1 {},{} v {} Z", cx,cy, (r-b),0, b, r, r, w.cos()*r-r, w.sin()*r, -b)
 }

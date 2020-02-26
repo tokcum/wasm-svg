@@ -47,7 +47,12 @@ pub fn run() -> Result<(), JsValue> {
   body.append("style").unwrap().html(r#"#A-31:hover, #A-32:hover, #A-33:hover {
     #fill: #ec008c;
     opacity: 0.5;
-  }"#);
+  }
+  #A-31:hover + text {
+  display: block;
+  }
+
+  "#);
   
   let w: i32 = 500;
   let h: i32 = 500;
@@ -87,6 +92,12 @@ pub fn run() -> Result<(), JsValue> {
       .attr("stroke", "gray")
       .attr("stroke-width", "1")
       .attr("transform", &format!("rotate({}, 0, 0)", 360/vec.len()*i));
+    h.append_svg_element("text").unwrap()
+        .attr("x", "0")
+        .attr("y", "0")
+        .attr("fill", "black")
+        .attr("display", "none")
+        .html(&v.0);
     i += 1;
   }
   

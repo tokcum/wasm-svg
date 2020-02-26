@@ -1,13 +1,13 @@
 
 
-struct Color_HSV {
-    h: u8,
+pub struct Color_HSV {
+    h: u16,
     s: u8,
     v: u8,
 }
 
 #[derive(Debug)]
-struct Color_RGB {
+pub struct Color_RGB {
     r: u8,
     g: u8,
     b: u8,
@@ -17,6 +17,12 @@ impl Color_RGB {
 
     fn new(r: u8, g: u8, b: u8) -> Color_RGB {
         Color_RGB { r, g, b }
+    }
+
+    fn to_hex(&self) -> String {
+
+        format!("#{:x}{:x}{:x}", self.r, self.g, self.b)
+
     }
 
 }
@@ -32,8 +38,16 @@ impl std::cmp::PartialEq for Color_RGB {
 
 impl Color_HSV {
 
-    fn new(h: u8, s: u8, v: u8) -> Color_HSV {
+    pub fn new(h: u16, s: u8, v: u8) -> Color_HSV {
         Color_HSV { h: h, s: s, v: v }
+    }
+
+    pub fn shift_hue(&mut self, degree: u16) -> &Self {
+
+        self.h = (self.h + degree) % 360;
+
+        self
+
     }
 
     fn to_rgb(&self) -> Color_RGB {
@@ -93,6 +107,10 @@ impl Color_HSV {
 
     }
 
+    pub fn to_hex(&self) -> String {
+        self.to_rgb().to_hex()
+    }
+
 }
 
 #[test]
@@ -102,5 +120,28 @@ fn test_convert() {
     let color_rgb = color.to_rgb();
 
     assert_eq!(Color_RGB::new(218, 255, 178), color_rgb);
+
+}
+
+#[test]
+fn test_tohex() {
+
+    let color_rgb = Color_RGB::new(66, 135, 245);
+
+    assert_eq!("#4287f5", color_rgb.to_hex());
+
+}
+
+#[test]
+fn test_shift() {
+
+    let mut color = Color_HSV::new(89, 30, 100);
+    color.shift_hue(20);
+
+    assert_eq!(109, color.h);
+
+    color.shift_hue(270);
+
+    assert_eq!(19, color.h)
 
 }

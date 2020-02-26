@@ -67,6 +67,7 @@ pub fn run() -> Result<(), JsValue> {
   vec.insert("A-36", "red");
   vec.insert("A-37", "red");
   vec.insert("A-38", "red");
+  vec.insert("A-39", "red");
   
   body.append_svg().unwrap().attr("width", &w.to_string()).attr("height", &h.to_string()).attr("viewBox", &format!("{} {} {} {}", w/2*-1, h/2*-1, w, h));
   
@@ -80,7 +81,7 @@ pub fn run() -> Result<(), JsValue> {
   
   let h = body.select("svg").unwrap().append_svg_element("g").unwrap();
   let mut i = 0;
-  let mut color = Color_HSV::new(0, 30, 100);
+  let mut color = ColorHSV::create(0, 30, 82);
   
   for v in vec.iter() {
     h.append_svg_element("circle").unwrap()
@@ -88,7 +89,7 @@ pub fn run() -> Result<(), JsValue> {
       .attr("cx", "0")
       .attr("cy", &(r*-1).to_string())
       .attr("r", "10")
-      .attr("fill", &color.shift_hue((360/vec.len()+120) as u16).to_hex()) // &(v.1).to_string()
+      .attr("fill", &color.shift_hue((360/vec.len()) as u16).to_hex()) // &(v.1).to_string()
       .attr("stroke", "gray")
       .attr("stroke-width", "1")
       .attr("transform", &format!("rotate({}, 0, 0)", 360/vec.len()*i));

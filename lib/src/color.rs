@@ -1,6 +1,7 @@
 //! Representing a Color and providing an interface to color manipulation and color space
 //! conversion.
 
+
 /// Color supports different formats. As of today this is
 /// # HSV
 /// # RGB
@@ -37,65 +38,29 @@ impl ColorHSV {
   }
   
   fn to_rgb(&self) -> ColorRGB {
-    let mut r = 0.0;
-    let mut g = 0.0;
-    let mut b = 0.0;
+    let s: f32 = self.s as f32 / 100.0;
+    let v: f32 = self.v as f32 / 100.0;
     
-    // Convert to interval [0, 1]
-    let h = self.h as f32 / 360.0;
-    let s = self.s as f32 / 100.0;
-    let v = self.v as f32 / 100.0;
-    
-    let chroma = v * s;
-    let h1 = h * 6.0;
-    let x = chroma * (1 - (h1 % 2 -1 ).abs());
-    
-    let i = (h * 6.0).floor();
-    
-    let f = h * 6.0 - i;
-    let p = v * (1.0 - s);
-    let q = v * (1.0 - f * s);
-    let t = v * (1.0 - (1.0 - f) * s);
-    
-    if h1 >= 0.0 && h1 < 1.0 {
-      r = chroma;
-        g = x;
-        b = 0.0;
-      }
-    
-    match h1 % 6.0 {
-      1 => {
-        r = q;
-        g = v;
-        b = p;
-      }
-      2 => {
-        r = p;
-        g = v;
-        b = t;
-      }
-      3 => {
-        r = p;
-        g = q;
-        b = v;
-      }
-      4 => {
-        r = t;
-        g = p;
-        b = v;
-      }
-      5 => {
-        r = v;
-        g = p;
-        b = q;
-      }
-      _ => {}
+    if s == 0.0
+    {
+      let c: u8 = (v * 255.0).round() as u8;
+      return ColorRGB::new(c, c, c)
     }
     
-    ColorRGB {
-      r: (r * 255.0) as u8,
-      g: (g * 255.0) as u8,
-      b: (b * 255.0) as u8,
+    let h= (self.h as f32 / 60.0).floor() as i8;
+    let f: f32 = self.h as f32/ 60.0 - h as f32;
+    let p = v * (1.0 - s);
+    let q = v * (1.0 - s * f);
+    let t = v * (1.0 - s * (1.0 - f));
+    
+    match h {
+      0 | 6 => ColorRGB {r: (v * 255.0).round() as u8, g: (t * 255.0).round() as u8, b: (p * 255.0).round() as u8},
+      1 => ColorRGB {r: (q * 255.0).round() as u8, g: (v * 255.0).round() as u8, b: (p * 255.0).round() as u8},
+      2 => ColorRGB {r: (p * 255.0).round() as u8, g: (v * 255.0).round() as u8, b: (t * 255.0).round() as u8},
+      3 => ColorRGB {r: (p * 255.0).round() as u8, g: (q * 255.0).round() as u8, b: (v * 255.0).round() as u8},
+      4 => ColorRGB {r: (t * 255.0).round() as u8, g: (p * 255.0).round() as u8, b: (v * 255.0).round() as u8},
+      5 => ColorRGB {r: (v * 255.0).round() as u8, g: (p * 255.0).round() as u8, b: (q * 255.0).round() as u8},
+      _ => ColorRGB::new(0, 0, 0)
     }
   }
   
@@ -140,11 +105,14 @@ pub struct ColorHEX {
 }
 
 #[test]
-fn test_convert() {
-    let color = ColorHSV::create(89, 30, 100);
-    let color_rgb = color.to_rgb();
+fn test_to_rgb() {
+  
 
-    assert_eq!(ColorRGB::new(218, 255, 178), color_rgb);
+    assert_eq!(ColorHSV::create(0, 100, 100).to_rgb(), ColorRGB::new(255, 0, 0));
+  assert_eq!(ColorHSV::create(240, 100, 100).to_rgb(), ColorRGB::new(0, 0, 255));
+  assert_eq!(ColorHSV::create(20, 75, 36).to_rgb(), ColorRGB::new(92, 46, 23));
+  
+  
 }
 
 #[test]

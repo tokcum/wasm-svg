@@ -3,6 +3,7 @@ pub mod document;
 pub mod element;
 pub mod node;
 pub mod svg_circle_element;
+pub mod color;
 
 // Shorten path to objects defined in it.
 use crate::element::*;

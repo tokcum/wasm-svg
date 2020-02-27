@@ -44,7 +44,7 @@ impl Element {
         self.0.set_attribute(name, value).unwrap();
         self
     }
-
+  
     pub fn from(e: web_sys::Element) -> Element {
         Element(e)
     }

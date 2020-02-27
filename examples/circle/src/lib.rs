@@ -5,36 +5,13 @@ use wasm_svg_lib::element::*;
 use wasm_svg_lib::Selection;
 use wasm_bindgen::__rt::std::collections::HashMap;
 use wasm_svg_lib::color::*;
+use wasm_svg_lib::circle::*;
 
 #[wasm_bindgen]
 pub fn hello(name: String) -> String {
   let result = format!("Hello {}!", name);
   return result.into();
 }
-
-/*
-[‎26.‎02.‎2020 13:17] Meitz, Lukas, HRG-F1:
-<svg viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg">
-
-  <style>
-  #circle1:hover, #circle2:hover, #circle3:hover {
-    #fill: #ec008c;
-    opacity: 0.5;
-  }
-  </style>
-
-  <circle cx="0" cy="0" r="80" stroke="black" stroke-width="1" fill="white" />
-  
-  
-  
-  <g class="series">
-	<circle id="circle1" cx="0" cy="-80" r="10" stroke="black"  fill="blue" stroke-width="1" transform="rotate(0, 0, 0)"/>
-	<circle id="circle2" cx="0" cy="-80" r="10" stroke="black"  fill="green" stroke-width="1" transform="rotate(120, 0, 0)"/>
-	<circle id="circle3" cx="0" cy="-80" r="10" stroke="black"  fill="red" stroke-width="1" transform="rotate(240, 0, 0)"/>
-  </g>
-
-</svg>
-*/
 
 // Called by our JS entry point to run the example
 #[wasm_bindgen]
@@ -56,7 +33,8 @@ pub fn run() -> Result<(), JsValue> {
   
   let w: i32 = 500;
   let h: i32 = 500;
-  let r: i32 = 80;
+  
+  let circle: Circle = Circle{cx: 0.0, cy: 0.0, r : 80.0 };
   
   let mut vec: HashMap<&str, &str> = HashMap::new();
   vec.insert("A-31", "blue");
@@ -71,11 +49,9 @@ pub fn run() -> Result<(), JsValue> {
   
   body.append_svg().unwrap().attr("width", &w.to_string()).attr("height", &h.to_string()).attr("viewBox", &format!("{} {} {} {}", w/2*-1, h/2*-1, w, h));
   
-  let mut g = body.select("svg").unwrap().append_svg_element("circle").unwrap();
-  g.attr("cx", "0")
-    .attr("cy", "0")
-    .attr("r", &r.to_string())
-    .attr("fill", "white")
+  let mut g = body.select("svg").unwrap().append_svg_circle(&circle).unwrap();
+  
+  g.attr("fill", "white")
     .attr("stroke", "gray")
     .attr("stroke-width", "1");
   
@@ -85,9 +61,11 @@ pub fn run() -> Result<(), JsValue> {
   
   for v in vec.iter() {
     h.append_svg_element("circle").unwrap()
-      .attr("id", &(v.0).to_string())
+      .id(&(v.0).to_string())
+      .class("node")
+      .class("node2")
       .attr("cx", "0")
-      .attr("cy", &(r*-1).to_string())
+      .attr("cy", &(circle.r*-1.0).to_string())
       .attr("r", "10")
       .attr("fill", &color.shift_hue((360/vec.len()) as u16).to_hex()) // &(v.1).to_string()
       .attr("stroke", "gray")

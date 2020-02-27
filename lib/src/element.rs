@@ -2,6 +2,7 @@ use wasm_bindgen::JsCast;
 
 use crate::document::*;
 use wasm_bindgen::__rt::core::f64::consts::PI;
+use crate::circle::Circle;
 
 pub struct Element(pub web_sys::Element);
 
@@ -39,9 +40,29 @@ impl Element {
         
         Some(Element::from(self.0.append_child(&e.0).unwrap().dyn_into::< web_sys::Element >().unwrap()))
     }
+    
+    pub fn append_svg_circle(&self, circle: &Circle) -> Option<Element> {
+        let mut e = Element::new_svg_element("circle");
+        e.attr("cx", format!("{}", circle.cx).as_str())
+          .attr("cy", format!("{}", circle.cy).as_str())
+          .attr("r", format!("{}", circle.r).as_str());
+    
+        Some(Element::from(self.0.append_child(&e.0).unwrap().dyn_into::< web_sys::Element >().unwrap()))
+    }
 
-    pub fn attr(&mut self, name: &str, value: &str) -> &mut Element {
+    pub fn attr(&mut self, name: &str, value: &str) -> &mut Self {
         self.0.set_attribute(name, value).unwrap();
+        self
+    }
+    
+    pub fn id (&mut self, id: &str) -> &mut Self {
+        self.0.set_attribute("id", id).unwrap();
+        self
+    }
+    
+    pub fn class(&mut self, class: &str) -> &mut Self {
+        // Todo: think about adding a class instead of overwriting an existing class
+        self.0.set_attribute("class", class).unwrap();
         self
     }
   

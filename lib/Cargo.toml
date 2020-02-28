@@ -26,6 +26,7 @@ features = [
   'Element',
   'HtmlElement',
   'Node',
+  'NodeList',
   'SvgCircleElement',
   'SvgElement',
   'Window',

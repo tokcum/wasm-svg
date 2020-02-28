@@ -1,8 +1,9 @@
 use wasm_bindgen::JsCast;
 
 use crate::document::*;
-use wasm_bindgen::__rt::core::f64::consts::PI;
 use crate::circle::Circle;
+use crate::nodelist::*;
+use std::f64::consts::PI;
 
 pub struct Element(pub web_sys::Element);
 
@@ -79,8 +80,14 @@ impl super::Selection for Element {
     fn select (&self, s: &str) -> Option<Element> {
         Some(Element::from(self.0.query_selector(s).unwrap().unwrap()))
     }
-    
-    fn append(&self, s: &str) -> Option<Element> {
+  
+  fn select_all(&self, s: &str) -> Option<Nodes> {
+    let mut nodes = Nodes::new();
+    nodes.list = Some(NodeList::from(self.0.query_selector_all(s).unwrap()));
+    Some(nodes)
+  }
+  
+  fn append(&self, s: &str) -> Option<Element> {
         let e = Element::new(s);
 
         Some(Element::from(self.0.append_child(&e.0).unwrap().dyn_into::< web_sys::Element >().unwrap()))

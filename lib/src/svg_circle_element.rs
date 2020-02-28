@@ -4,7 +4,7 @@ use super::Selection;
 
 use crate::document::*;
 use crate::element::Element;
-
+use crate::nodelist::*;
 
 
 // Creating a new type in a tuple struct with just one field thus
@@ -29,8 +29,13 @@ impl Selection for SvgCircleElement {
     fn select (&self, s: &str) -> Option<Element> {
         Some(Element::from(self.0.query_selector(s).unwrap().unwrap()))
     }
-    
-    fn append(&self, s: &str) -> Option<Element> {
+  
+  fn select_all(&self, s: &str) -> Option<Nodes> {
+    unimplemented!()
+  }
+  
+  
+  fn append(&self, s: &str) -> Option<Element> {
         let e = Element::new(s);
         
         Some(Element::from(self.0.append_child(&e.0).unwrap().dyn_into::< web_sys::Element >().unwrap()))

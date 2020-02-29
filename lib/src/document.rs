@@ -18,7 +18,7 @@ impl super::Selection for Document {
         Some(Element::from(self.0.query_selector(s).unwrap().unwrap()))
     }
   
-  fn select_all(&self, s: &str) -> Option<Nodes> {
+  fn select_all(&self, _s: &str) -> Option<Nodes> {
     unimplemented!()
   }
   

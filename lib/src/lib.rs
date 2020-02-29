@@ -5,7 +5,7 @@ pub mod node;
 pub mod nodelist;
 pub mod svg_circle_element;
 pub mod color;
-pub mod circle;
+pub mod geometry;
 
 // Shorten path to objects defined in it.
 use crate::element::*;

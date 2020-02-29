@@ -1,7 +1,7 @@
 use wasm_bindgen::JsCast;
 
 use crate::document::*;
-use crate::circle::Circle;
+use crate::geometry::circle::Circle;
 use crate::nodelist::*;
 use std::f64::consts::PI;
 
@@ -83,7 +83,12 @@ impl super::Selection for Element {
   
   fn select_all(&self, s: &str) -> Option<Nodes> {
     let mut nodes = Nodes::new();
-    nodes.list = Some(NodeList::from(self.0.query_selector_all(s).unwrap()));
+      let nl = self.0.query_selector_all(s).unwrap();
+      let mut i = 0;
+      while i < nl.length() {
+          nodes.list.push(Element::from(nl.item(i).unwrap().dyn_into::< web_sys::Element >().unwrap()));
+          i += 1;
+      }
     Some(nodes)
   }
   

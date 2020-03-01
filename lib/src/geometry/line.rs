@@ -28,6 +28,14 @@ impl Line {
             t: LineType::Segment,
         }
     }
+
+    pub fn start(&self) -> Point {
+        self.p1
+    }
+
+    pub fn end(&self) -> Point {
+        self.p2
+    }
 }
 
 impl Default for Line {

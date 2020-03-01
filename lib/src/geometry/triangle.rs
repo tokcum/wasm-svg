@@ -13,6 +13,10 @@ impl Triangle {
     pub fn new(b: Line, h: Line) -> Self {
         Triangle { b, h }
     }
+
+    pub fn edges(&self) -> (Point, Point, Point) {
+        (self.b.start(), self.h.end(), self.b.end())
+    }
 }
 
 impl Default for Triangle {

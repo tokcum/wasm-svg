@@ -2,9 +2,9 @@ use wasm_bindgen::JsCast;
 
 use super::web::Selection;
 
-use crate::web::document::Document;
-use crate::web::element::Element;
-use crate::web::nodelist::Nodes;
+use crate::web::Document;
+use crate::web::Element;
+use crate::web::Nodes;
 
 
 // Creating a new type in a tuple struct with just one field thus

@@ -2,6 +2,7 @@ use wasm_bindgen::JsCast;
 
 use crate::web::document::*;
 use crate::geometry::Circle;
+use crate::svg::Polygon;
 use crate::web::nodelist::Nodes;
 use std::f64::consts::PI;
 
@@ -48,6 +49,21 @@ impl Element {
           .attr("cy", format!("{}", circle.cy).as_str())
           .attr("r", format!("{}", circle.r).as_str());
     
+        Some(Element::from(self.0.append_child(&e.0).unwrap().dyn_into::< web_sys::Element >().unwrap()))
+    }
+    
+    pub fn append(&self, polygon: &Polygon) -> Option<Element> {
+        let mut e = Element::new_svg_element("polygon");
+    
+        let mut points= String::new();
+        for v in polygon.points().iter() {
+            points += format!("{},{} ", v.x(), v.y() ).as_str();
+        }
+        
+        e.id(polygon.id().as_str())
+          .class(polygon.class().as_str())
+          .attr("points", points.as_str());
+          
         Some(Element::from(self.0.append_child(&e.0).unwrap().dyn_into::< web_sys::Element >().unwrap()))
     }
 

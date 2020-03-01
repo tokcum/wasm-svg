@@ -1,5 +1,5 @@
 use wasm_bindgen::prelude::*;
-use wasm_svg_lib::web::document::*;
+use wasm_svg_lib::web::Document;
 use wasm_svg_lib::web::Selection;
 use wasm_bindgen::__rt::std::collections::HashMap;
 use wasm_svg_lib::utils::color::*;

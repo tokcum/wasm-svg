@@ -16,6 +16,8 @@ async fn main() -> std::io::Result<()> {
       .service(Files::new("/examples/circle/pkg", "examples/circle/pkg"))
       .service(Files::new("/examples/simple/static", "examples/simple/static"))
       .service(Files::new("/examples/simple/pkg", "examples/simple/pkg"))
+      .service(Files::new("/examples/triangle/static", "examples/triangle/static"))
+      .service(Files::new("/examples/triangle/pkg", "examples/triangle/pkg"))
       .route("/", web::get().to(index))
   })
     .bind("127.0.0.1:8080")

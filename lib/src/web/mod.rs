@@ -1,12 +1,14 @@
-// Declare mod as public so example code has access to it
-pub mod document;
-pub mod element;
-pub mod node;
-pub mod nodelist;
+// Define web module's public interface
+pub use document::Document;
+pub use element::Element;
+pub use node::Node;
+pub use nodelist::{NodeList, Nodes};
 
-// Shorten path to objects defined in it.
-use crate::web::element::Element;
-use crate::web::nodelist::Nodes;
+// Define geometry's sub modules
+mod document;
+mod element;
+mod node;
+mod nodelist;
 
 pub trait Selection {
   fn select(&self, s: &str) -> Option<Element>;

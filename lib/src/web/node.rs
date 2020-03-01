@@ -1,6 +1,6 @@
 use wasm_bindgen::JsCast;
 
-use crate::element::*;
+use crate::web::element::Element;
 
 #[derive(Debug)]
 pub struct Node(web_sys::Node);

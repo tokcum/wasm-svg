@@ -1,10 +1,10 @@
 use wasm_bindgen::JsCast;
 
-use super::Selection;
+use super::web::Selection;
 
-use crate::document::*;
-use crate::element::Element;
-use crate::nodelist::*;
+use crate::web::document::Document;
+use crate::web::element::Element;
+use crate::web::nodelist::Nodes;
 
 
 // Creating a new type in a tuple struct with just one field thus
@@ -65,10 +65,10 @@ impl Selection for SvgCircleElement {
 */
 
 /*
-1circleRadii = [40, 20, 10]
+<1circleRadii = [40, 20, 10]
  2
  3var svgContainer = d3.select("body").append("svg")
- 4                                    .attr("width", 600)
+ 4          >                          .attr("width", 600)
  5                                    .attr("height", 100);
  6
  7var circles = svgContainer.selectAll("circle")

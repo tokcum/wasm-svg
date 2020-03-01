@@ -1,9 +1,9 @@
 use wasm_bindgen::prelude::*;
-use wasm_svg_lib::document::*;
-use wasm_svg_lib::Selection;
+use wasm_svg_lib::web::document::*;
+use wasm_svg_lib::web::Selection;
 use wasm_bindgen::__rt::std::collections::HashMap;
-use wasm_svg_lib::color::*;
-use wasm_svg_lib::geometry::circle::*;
+use wasm_svg_lib::utils::color::*;
+use wasm_svg_lib::geometry::Circle;
 
 #[wasm_bindgen]
 pub fn hello(name: String) -> String {
@@ -34,7 +34,7 @@ pub fn run() -> Result<(), JsValue> {
   
   let circle: Circle = Circle{cx: 0.0, cy: 0.0, r : 80.0 };
   
-  let data = [5, 15, 25, 15, 45, 70];
+  let data = [5, 15, 25, 15, 45, 70, 3, 7];
   
   let mut vec: HashMap<&str, &str> = HashMap::new();
   vec.insert("A-31", "blue");

@@ -1,4 +1,5 @@
+#[derive(Debug)]
 pub struct Point {
-    pub x: i64,
-    pub y: i64,
+    pub x: i32,
+    pub y: i32,
 }

@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct Circle {
     pub cx: f64,
     pub cy: f64,

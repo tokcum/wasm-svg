@@ -1,8 +1,8 @@
 use wasm_bindgen::JsCast;
 
-use crate::document::*;
-use crate::geometry::circle::Circle;
-use crate::nodelist::*;
+use crate::web::document::*;
+use crate::geometry::Circle;
+use crate::web::nodelist::Nodes;
 use std::f64::consts::PI;
 
 pub struct Element(pub web_sys::Element);

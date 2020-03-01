@@ -1,7 +1,7 @@
 use wasm_bindgen::JsCast;
 
-use crate::element::*;
-use crate::nodelist::*;
+use crate::web::element::Element;
+use crate::web::nodelist::Nodes;
 
 pub struct Document(pub web_sys::Document);
 

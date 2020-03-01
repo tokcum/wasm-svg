@@ -1,5 +1,5 @@
-use crate::element::*;
-use crate::node::*;
+use crate::web::element::Element;
+use crate::web::node::Node;
 
 pub struct NodeList(pub web_sys::NodeList);
 

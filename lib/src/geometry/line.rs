@@ -1,29 +1,51 @@
+use std::ops::Mul;
+
 use crate::geometry::point::Point;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Line {
-  p1: Point,
-  p2: Point,
-  t: LineType,
+    p1: Point,
+    p2: Point,
+    t: LineType,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 enum LineType {
-  // ToDo: LineType::Full unimplemented
-  #[allow(dead_code)]
-  Full,
-  // ToDo: LineType::Half unimplemented
-  #[allow(dead_code)]
-  Half,
-  Segment,
+    // ToDo: LineType::Full unimplemented
+    #[allow(dead_code)]
+    Full,
+    // ToDo: LineType::Half unimplemented
+    #[allow(dead_code)]
+    Half,
+    Segment,
 }
 
 impl Line {
-  pub fn new() -> Self {
-    Line{ p1: Point{x: 0, y: 0},  p2: Point{x: 1, y: 1}, t: LineType::Segment }
-  }
-  
-  pub fn create(p1: Point, p2: Point) -> Self {
-    Line{ p1, p2, t: LineType::Segment }
-  }
+    pub fn new(p1: Point, p2: Point) -> Self {
+        Line {
+            p1,
+            p2,
+            t: LineType::Segment,
+        }
+    }
+}
+
+impl Default for Line {
+    fn default() -> Self {
+        Line {
+            p1: Point::new(0, 0),
+            p2: Point::new(1, 1),
+            t: LineType::Segment,
+        }
+    }
+}
+
+impl Mul<i32> for Line {
+    type Output = Line;
+
+    fn mul(mut self, rhs: i32) -> Self::Output {
+        self.p1 = self.p1 * rhs;
+        self.p2 = self.p2 * rhs;
+        self
+    }
 }

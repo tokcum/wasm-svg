@@ -22,8 +22,8 @@ impl Triangle {
 impl Default for Triangle {
     fn default() -> Self {
         Triangle::new(
-            Line::new(Point::new(-1, 0), Point::new(1, 0)),
-            Line::new(Point::new(0, 0), Point::new(0, 1)),
+            Line::new(Point::new(-10, 0), Point::new(10, 0)),
+            Line::new(Point::new(0, 0), Point::new(0, 10)),
         )
     }
 }

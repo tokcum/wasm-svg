@@ -1,4 +1,5 @@
 use wasm_bindgen::prelude::*;
+use wasm_svg_lib::svg::SvgElement;
 use wasm_svg_lib::web::Document;
 use wasm_svg_lib::web::Selection;
 
@@ -14,7 +15,7 @@ pub fn run() -> Result<(), JsValue> {
   let d = Document::new();
   let body = d.select("body").expect("document should have a body");
   
-  body.append("p").unwrap().html("Hello from Rust!");
+  body.append(&SvgElement::String("p".to_string())).unwrap().html("Hello from Rust!");
   
   Ok(())
 }
@@ -45,7 +46,7 @@ pub fn append_rect(selector: &str) -> Result<(), JsValue> {
   let d = Document::new();
   let el = d.select(selector).unwrap();
   
-  el.append("rect").unwrap().attr("x", "1.0").attr("y", "1.0").attr("width", "150.0")
+  el.append(&SvgElement::String("rect".to_string())).unwrap().attr("x", "1.0").attr("y", "1.0").attr("width", "150.0")
     .attr("height", "150.0").attr("class", "rect").attr("id", "rect");
   
   Ok(())

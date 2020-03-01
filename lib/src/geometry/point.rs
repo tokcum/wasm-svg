@@ -30,3 +30,13 @@ impl Mul<i32> for Point {
         self
     }
 }
+
+impl Mul<(i32, i32)> for Point {
+    type Output = Point;
+    
+    fn mul(mut self, rhs: (i32, i32)) -> Self::Output {
+        self.x = self.x * rhs.0;
+        self.y = self.y * rhs.1;
+        self
+    }
+}

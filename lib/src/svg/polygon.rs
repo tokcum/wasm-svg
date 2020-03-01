@@ -52,9 +52,9 @@ impl From<Triangle> for Polygon {
     fn from(t: Triangle) -> Self {
         let e = t.edges();
         let mut v: Vec<Position> = Vec::new();
-        v.push(Position::from(e.0));
-        v.push(Position::from(e.1));
-        v.push(Position::from(e.2));
+        v.push(Position::from(e.0 * (1, -1)));
+        v.push(Position::from(e.1 * (1, -1)));
+        v.push(Position::from(e.2 * (1, -1)));
     
         Polygon {
             id: "".to_string(),

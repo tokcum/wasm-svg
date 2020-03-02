@@ -9,7 +9,7 @@ repository = "https://github.com/tokcum/wasm-svg"
 homepage = ""
 documentation = ""
 description = """
-Circle example to demonstrate the power of wasm-svg-lib.
+Perfchart example to demonstrate the power of wasm-svg-lib.
 """
 edition = "2018"
 

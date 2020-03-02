@@ -27,7 +27,7 @@ pub fn run() -> Result<(), JsValue> {
   
   body.append_svg().unwrap().attr("width", &w.to_string()).attr("height", &h.to_string()).attr("viewBox", &format!("{} {} {} {}", w/2*-1, h/2*-1, w, h));
   
-  let mut g = body.select("svg").unwrap().append(&SvgElement::Polygon(p)).unwrap();
+  let mut g = body.select("svg").unwrap().append(&SvgElement::Polygon(&p)).unwrap();
   
   Ok(())
 }

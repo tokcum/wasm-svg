@@ -81,6 +81,34 @@ impl Element {
 
     pub fn append(&self, element: &SvgElement) -> Option<Element> {
         match element {
+            SvgElement::Axis(axis) => {
+                let mut e = Element::new_svg_element("g");
+                e.append(&SvgElement::Line(&axis.line()));
+                e.append(&SvgElement::Polygon(&axis.head().unwrap()));
+    
+                Some(Element::from(
+                    self.0
+                      .append_child(&e.0)
+                      .unwrap()
+                      .dyn_into::<web_sys::Element>()
+                      .unwrap(),
+                ))
+            }
+            SvgElement::Line(line) => {
+                let mut e = Element::new_svg_element("line");
+                e.attr("x1", format!("{}", line.p1().x()).as_str())
+                  .attr("y1", format!("{}", line.p1().y()).as_str())
+                  .attr("x2", format!("{}", line.p2().x()).as_str())
+                  .attr("y2", format!("{}", line.p2().y()).as_str());
+                  
+                Some(Element::from(
+                    self.0
+                      .append_child(&e.0)
+                      .unwrap()
+                      .dyn_into::<web_sys::Element>()
+                      .unwrap(),
+                ))
+            }
             SvgElement::Polygon(polygon) => {
                 let mut e = Element::new_svg_element("polygon");
 
@@ -89,9 +117,12 @@ impl Element {
                     points += format!("{},{} ", v.x(), v.y()).as_str();
                 }
 
+                e.attr("points", points.as_str());
+                /*
                 e.id(polygon.id().as_str())
                     .class(polygon.class().as_str())
                     .attr("points", points.as_str());
+                    */
 
                 Some(Element::from(
                     self.0

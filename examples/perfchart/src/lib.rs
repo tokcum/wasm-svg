@@ -2,6 +2,7 @@ use wasm_bindgen::__rt::std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 use wasm_svg_lib::geometry::Circle;
 use wasm_svg_lib::geometry::Point;
+use wasm_svg_lib::svg::Axis;
 use wasm_svg_lib::svg::Polyline;
 use wasm_svg_lib::svg::SvgElement;
 use wasm_svg_lib::utils::color::*;
@@ -39,9 +40,11 @@ pub fn run() -> Result<(), JsValue> {
     points.push(Point::new(80, 20));
     points.push(Point::new(90, 40));
     points.push(Point::new(100, 0));
-  
-  let pos: SvgElement = SvgElement::Polyline(Polyline::from(points));
-    
+    points.push(Point::new(110, 50));
+    points.push(Point::new(120, 0));
+
+    let pos: SvgElement = SvgElement::Polyline(Polyline::from(points));
+
     body.append_svg()
         .unwrap()
         .attr("width", &w.to_string())
@@ -50,9 +53,14 @@ pub fn run() -> Result<(), JsValue> {
             "viewBox",
             &format!("{} {} {} {}", w / 2 * -1, h / 2 * -1, w, h),
         );
-  let h = body.select("svg").unwrap();
+    let h = body.select("svg").unwrap();
+    h.append(&pos);
   
-  h.append(&pos);
+    let g = body.select("svg").unwrap().append_svg_element("g").unwrap();
+  let mut a = g.append(&SvgElement::Axis(&Axis::default())).unwrap();
+    a.attr("stroke", "gray")
+      .attr("stroke-width", "2");
   
-  Ok(())
+
+    Ok(())
 }

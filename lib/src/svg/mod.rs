@@ -16,8 +16,10 @@ mod scale;
 
 mod test;
 
-pub enum SvgElement {
+pub enum SvgElement<'a> {
+  Axis(&'a Axis),
+  Line(&'a Line),
   Polyline(Polyline),
-  Polygon(Polygon),
+  Polygon(&'a Polygon),
   String(String),
 }

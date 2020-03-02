@@ -3,21 +3,23 @@ use crate::geometry::Triangle;
 use crate::svg::class::Class;
 use crate::svg::Pos;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Polygon {
-    id: String,
-    class: Option<Class>,
+    //id: String,
+    //class: Option<Class>,
     points: Vec<Pos>,
 }
 
 impl Polygon {
-    pub fn id(&self) -> String {
+    /*pub fn id(&self) -> String {
         self.id.clone()
     }
-
+    */
+    /*
     pub fn class(&self) -> String {
         self.class.as_ref().unwrap().to_string()
     }
+    */
 
     pub fn points(&self) -> Vec<Pos> {
         self.points.clone()
@@ -29,12 +31,15 @@ impl Polygon {
             points += format!("{},{} ", v.x(), v.y()).as_str();
         }
 
+        /*
         format!(
             "id=\"{}\" class=\"{}\" points=\"{}\"",
             self.id,
             self.class.as_ref().unwrap().to_string(),
             points
         )
+        */
+        format!("points=\"{}\"", points)
     }
 }
 
@@ -47,8 +52,8 @@ impl Default for Polygon {
         v.push(Pos::from(e.2));
 
         Polygon {
-            id: "".to_string(),
-            class: Some(Class::Triangle),
+            //id: "".to_string(),
+            //class: Some(Class::Triangle),
             points: v,
         }
     }
@@ -63,8 +68,8 @@ impl From<Triangle> for Polygon {
         v.push(Pos::from(e.2 * (1, -1)));
 
         Polygon {
-            id: "".to_string(),
-            class: Some(Class::Triangle),
+            //id: "".to_string(),
+            //class: Some(Class::Triangle),
             points: v,
         }
     }
@@ -77,8 +82,8 @@ impl From<Vec<Point>> for Polygon {
             v.push(Pos::from(*point * (1, -1)))
         }
         Polygon {
-            id: "".to_string(),
-            class: Some(Class::Polygon),
+            //id: "".to_string(),
+            //class: Some(Class::Polygon),
             points: v,
         }
     }

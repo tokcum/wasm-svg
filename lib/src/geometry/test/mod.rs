@@ -1,1 +1,1 @@
-//mod triangle;
+mod triangle;

@@ -1461,6 +1461,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "wasm-svg-examples-triangle"
+version = "0.1.0"
+dependencies = [
+ "wasm-bindgen 0.2.58 (registry+https://github.com/rust-lang/crates.io-index)",
+ "wasm-svg-lib 0.1.0",
+ "web-sys 0.3.35 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "wasm-svg-lib"
 version = "0.1.0"
 dependencies = [

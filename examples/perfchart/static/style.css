@@ -1,0 +1,15 @@
+/* Works as soon as there is something in SVG element */
+svg {
+  border: 1px solid black;
+}
+
+.polyline {
+  stroke: #306f91;
+  stroke-width: 3;
+  fill: none;
+  fill-opacity: 0.3;
+}
+
+#rect {
+  fill: green;
+}

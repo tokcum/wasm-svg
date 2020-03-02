@@ -1,14 +1,14 @@
 use crate::geometry::Point;
 
 #[derive(Clone, Copy, Debug)]
-pub struct Position {
+pub struct Pos {
     x: i32,
     y: i32,
 }
 
-impl Position {
+impl Pos {
     pub fn new(x: i32, y: i32) -> Self {
-        Position { x, y }
+        Pos { x, y }
     }
     
     pub fn x(&self) -> i32 {
@@ -20,14 +20,14 @@ impl Position {
     }
 }
 
-impl Default for Position {
+impl Default for Pos {
     fn default() -> Self {
-        Position { x: 0, y: 0 }
+        Pos { x: 0, y: 0 }
     }
 }
 
-impl From<Point> for Position {
+impl From<Point> for Pos {
     fn from(p: Point) -> Self {
-        Position{x: p.x(), y: p.y()}
+        Pos{x: p.x(), y: p.y()}
     }
 }

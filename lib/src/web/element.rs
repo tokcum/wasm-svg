@@ -1,7 +1,6 @@
 use wasm_bindgen::JsCast;
 
 use crate::geometry::Circle;
-use crate::svg::Polygon;
 use crate::svg::SvgElement;
 use crate::web::document::*;
 use crate::web::nodelist::Nodes;
@@ -102,10 +101,36 @@ impl Element {
                         .unwrap(),
                 ))
             }
+            SvgElement::Polyline(polyline) => {
+                let mut e = Element::new_svg_element("polyline");
+
+                let mut points = String::new();
+                for v in polyline.points().iter() {
+                    points += format!("{},{} ", v.x(), v.y()).as_str();
+                }
+
+                e.id(polyline.id().as_str())
+                    .class(polyline.class().as_str())
+                    .attr("points", points.as_str());
+
+                Some(Element::from(
+                    self.0
+                        .append_child(&e.0)
+                        .unwrap()
+                        .dyn_into::<web_sys::Element>()
+                        .unwrap(),
+                ))
+            }
             SvgElement::String(s) => {
                 let e = Element::new(s);
-    
-                Some(Element::from(self.0.append_child(&e.0).unwrap().dyn_into::< web_sys::Element >().unwrap()))
+
+                Some(Element::from(
+                    self.0
+                        .append_child(&e.0)
+                        .unwrap()
+                        .dyn_into::<web_sys::Element>()
+                        .unwrap(),
+                ))
             }
         }
     }

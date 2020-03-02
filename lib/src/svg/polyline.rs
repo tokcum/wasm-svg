@@ -4,13 +4,13 @@ use crate::svg::class::Class;
 use crate::svg::Pos;
 
 #[derive(Debug)]
-pub struct Polygon {
+pub struct Polyline {
     id: String,
     class: Option<Class>,
     points: Vec<Pos>,
 }
 
-impl Polygon {
+impl Polyline {
     pub fn id(&self) -> String {
         self.id.clone()
     }
@@ -38,7 +38,7 @@ impl Polygon {
     }
 }
 
-impl Default for Polygon {
+impl Default for Polyline {
     fn default() -> Self {
         let e = Triangle::default().edges();
         let mut v: Vec<Pos> = Vec::new();
@@ -46,7 +46,7 @@ impl Default for Polygon {
         v.push(Pos::from(e.1));
         v.push(Pos::from(e.2));
 
-        Polygon {
+        Polyline {
             id: "".to_string(),
             class: Some(Class::Triangle),
             points: v,
@@ -54,7 +54,7 @@ impl Default for Polygon {
     }
 }
 
-impl From<Triangle> for Polygon {
+impl From<Triangle> for Polyline {
     fn from(triangle: Triangle) -> Self {
         let e = triangle.edges();
         let mut v: Vec<Pos> = Vec::new();
@@ -62,7 +62,7 @@ impl From<Triangle> for Polygon {
         v.push(Pos::from(e.1 * (1, -1)));
         v.push(Pos::from(e.2 * (1, -1)));
 
-        Polygon {
+        Polyline {
             id: "".to_string(),
             class: Some(Class::Triangle),
             points: v,
@@ -70,15 +70,15 @@ impl From<Triangle> for Polygon {
     }
 }
 
-impl From<Vec<Point>> for Polygon {
+impl From<Vec<Point>> for Polyline {
     fn from(points: Vec<Point>) -> Self {
         let mut v: Vec<Pos> = Vec::new();
         for (i, point) in points.iter().enumerate() {
             v.push(Pos::from(*point * (1, -1)))
         }
-        Polygon {
+        Polyline {
             id: "".to_string(),
-            class: Some(Class::Polygon),
+            class: Some(Class::Polyline),
             points: v,
         }
     }

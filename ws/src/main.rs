@@ -14,6 +14,8 @@ async fn main() -> std::io::Result<()> {
       .service(Files::new("/pkg", "lib/pkg"))
       .service(Files::new("/examples/circle/static", "examples/circle/static"))
       .service(Files::new("/examples/circle/pkg", "examples/circle/pkg"))
+      .service(Files::new("/examples/perfchart/static", "examples/perfchart/static"))
+      .service(Files::new("/examples/perfchart/pkg", "examples/perfchart/pkg"))
       .service(Files::new("/examples/simple/static", "examples/simple/static"))
       .service(Files::new("/examples/simple/pkg", "examples/simple/pkg"))
       .service(Files::new("/examples/triangle/static", "examples/triangle/static"))

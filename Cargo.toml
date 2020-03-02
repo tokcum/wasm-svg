@@ -16,8 +16,9 @@
 [workspace]
 members = [
   "examples/circle",
+  "examples/perfchart",
   "examples/simple",
-  "examples/triangle",
+  #"examples/triangle",
   "lib",
   "ws",
 ]

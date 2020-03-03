@@ -28,6 +28,9 @@ features = [
   'Node',
   'NodeList',
   'SvgCircleElement',
+  'SvgPolylineElement',
   'SvgElement',
+  'SvggElement',
+  'SvgsvgElement',
   'Window',
 ]

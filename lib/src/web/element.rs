@@ -5,6 +5,8 @@ use crate::svg::SvgElement;
 use crate::web::document::*;
 use crate::web::nodelist::Nodes;
 use std::f64::consts::PI;
+use crate::web::SvgCanvas;
+use crate::web::SvgGElement;
 
 pub struct Element(pub web_sys::Element);
 
@@ -85,28 +87,28 @@ impl Element {
                 let mut e = Element::new_svg_element("g");
                 e.append(&SvgElement::Line(&axis.line()));
                 e.append(&SvgElement::Polygon(&axis.head().unwrap()));
-    
+
                 Some(Element::from(
                     self.0
-                      .append_child(&e.0)
-                      .unwrap()
-                      .dyn_into::<web_sys::Element>()
-                      .unwrap(),
+                        .append_child(&e.0)
+                        .unwrap()
+                        .dyn_into::<web_sys::Element>()
+                        .unwrap(),
                 ))
             }
             SvgElement::Line(line) => {
                 let mut e = Element::new_svg_element("line");
                 e.attr("x1", format!("{}", line.p1().x()).as_str())
-                  .attr("y1", format!("{}", line.p1().y()).as_str())
-                  .attr("x2", format!("{}", line.p2().x()).as_str())
-                  .attr("y2", format!("{}", line.p2().y()).as_str());
-                  
+                    .attr("y1", format!("{}", line.p1().y()).as_str())
+                    .attr("x2", format!("{}", line.p2().x()).as_str())
+                    .attr("y2", format!("{}", line.p2().y()).as_str());
+
                 Some(Element::from(
                     self.0
-                      .append_child(&e.0)
-                      .unwrap()
-                      .dyn_into::<web_sys::Element>()
-                      .unwrap(),
+                        .append_child(&e.0)
+                        .unwrap()
+                        .dyn_into::<web_sys::Element>()
+                        .unwrap(),
                 ))
             }
             SvgElement::Polygon(polygon) => {
@@ -166,6 +168,16 @@ impl Element {
         }
     }
 
+    pub fn append_generic_element(&self, element: &Element) -> Option<Element> {
+        Some(Element::from(
+            self.0
+                .append_child(&element.0)
+                .unwrap()
+                .dyn_into::<web_sys::Element>()
+                .unwrap(),
+        ))
+    }
+
     pub fn attr(&mut self, name: &str, value: &str) -> &mut Self {
         self.0.set_attribute(name, value).unwrap();
         self
@@ -180,10 +192,6 @@ impl Element {
         // Todo: think about adding a class instead of overwriting an existing class
         self.0.set_attribute("class", class).unwrap();
         self
-    }
-
-    pub fn from(e: web_sys::Element) -> Element {
-        Element(e)
     }
 
     pub fn html(&self, s: &str) {
@@ -262,4 +270,22 @@ pub fn arc_alpha(cx: f64, cy: f64, r: f64, b: f64, a: f64) -> String {
         w.sin() * r,
         -b
     )
+}
+
+impl From<SvgCanvas> for Element {
+  fn from(canvas: SvgCanvas) -> Element {
+    Element(canvas.0)
+  }
+}
+
+impl From<SvgGElement> for Element {
+  fn from(g: SvgGElement) -> Element {
+    Element(g.0)
+  }
+}
+
+impl From<web_sys::Element> for Element {
+  fn from(element: web_sys::Element) -> Element {
+    Element(element)
+  }
 }

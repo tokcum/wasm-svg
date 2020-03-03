@@ -1,4 +1,3 @@
-use wasm_bindgen::__rt::std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 use wasm_svg_lib::geometry::Circle;
 use wasm_svg_lib::geometry::Point;
@@ -6,8 +5,8 @@ use wasm_svg_lib::svg::Axis;
 use wasm_svg_lib::svg::Polyline;
 use wasm_svg_lib::svg::SvgElement;
 use wasm_svg_lib::utils::color::*;
-use wasm_svg_lib::web::Document;
-use wasm_svg_lib::web::Selection;
+use wasm_svg_lib::web::{Document, SvgCanvas, SvgGElement};
+use wasm_svg_lib::web::{BasicElement, Element, Selection};
 
 #[wasm_bindgen]
 pub fn hello(name: String) -> String {
@@ -18,15 +17,15 @@ pub fn hello(name: String) -> String {
 // Called by our JS entry point to run the example
 #[wasm_bindgen]
 pub fn run() -> Result<(), JsValue> {
+    let w: i32 = 500;
+    let h: i32 = 500;
+
     let d = Document::new();
     let body = d.select("body").expect("document should have a body");
 
-    body.append(&SvgElement::String("p".to_string()))
-        .unwrap()
-        .html("Hello from Rust!");
+    let canvas = SvgCanvas::new(500 as f32, 500 as f32);
 
-    let w: i32 = 500;
-    let h: i32 = 500;
+    let svg = body.append_generic_element(&Element::from(canvas)).unwrap();
 
     let mut points: Vec<Point> = Vec::new();
     points.push(Point::new(0, 1));
@@ -45,22 +44,15 @@ pub fn run() -> Result<(), JsValue> {
 
     let pos: SvgElement = SvgElement::Polyline(Polyline::from(points));
 
-    body.append_svg()
-        .unwrap()
-        .attr("width", &w.to_string())
-        .attr("height", &h.to_string())
-        .attr(
-            "viewBox",
-            &format!("{} {} {} {}", w / 2 * -1, h / 2 * -1, w, h),
-        );
-    let h = body.select("svg").unwrap();
-    h.append(&pos);
-  
-    let g = body.select("svg").unwrap().append_svg_element("g").unwrap();
-  let mut a = g.append(&SvgElement::Axis(&Axis::default())).unwrap();
-    a.attr("stroke", "gray")
-      .attr("stroke-width", "2");
-  
+    svg.append(&pos);
 
+    svg.append_svg_element("g").unwrap();
+    let mut a = svg.append(&SvgElement::Axis(&Axis::default())).unwrap();
+    a.attr("stroke", "gray").attr("stroke-width", "2");
+
+    let g = SvgGElement::new();
+    g.set_id("test.id");
+
+    svg.append_generic_element(&Element::from(g)).unwrap();
     Ok(())
 }

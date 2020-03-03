@@ -2,6 +2,7 @@ use crate::geometry::Point;
 use crate::geometry::Triangle;
 use crate::svg::class::Class;
 use crate::svg::Pos;
+use crate::web::SvgElement;
 
 #[derive(Debug)]
 pub struct Polyline {
@@ -83,3 +84,30 @@ impl From<Vec<Point>> for Polyline {
         }
     }
 }
+
+/*
+impl Into<Option<SvgPolylineElement>> for Polyline {
+  fn into(self) -> Option<SvgPolylineElement> {
+    
+    let mut e = Element::new_svg_element("polyline");
+  
+    let mut points = String::new();
+    for v in polyline.points().iter() {
+      points += format!("{},{} ", v.x(), v.y()).as_str();
+    }
+  
+    e.id(polyline.id().as_str())
+      .class(polyline.class().as_str())
+      .attr("points", points.as_str());
+  
+    Some(Element::from(
+      self.0
+        .append_child(&e.0)
+        .unwrap()
+        .dyn_into::<web_sys::Element>()
+        .unwrap(),
+    ))
+    unimplemented!()
+  }
+}
+*/

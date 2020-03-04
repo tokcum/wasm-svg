@@ -18,12 +18,18 @@ mod svg_g_element;
 mod svg_polyline_element;
 
 pub trait Selection {
-  fn select(&self, s: &str) -> Option<Element>;
+  fn select(&self, s: &str) -> Option<SvgElement>;
   fn select_all(&self, s: &str) -> Option<Nodes>;
-  fn append(&self, s: &str) -> Option<Element>;
+  fn append(&self, s: &str) -> Option<SvgElement>;
 }
 
-pub trait BasicElement {
+pub enum Namespace {
+  SVG,
+  XHTML,
+}
+
+/*
+pub trait Element {
   fn id(&self) -> String;
   
   fn set_id(&self, id: &str) -> &Self;
@@ -31,4 +37,7 @@ pub trait BasicElement {
   fn class(&self) -> String;
   
   fn set_class(&self, class: &str) -> &Self;
+  
+  fn append(&mut self, element: impl Into<dyn Element>) -> &mut Self;
 }
+*/

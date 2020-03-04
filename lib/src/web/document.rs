@@ -1,36 +1,51 @@
 use wasm_bindgen::JsCast;
 
-use crate::web::Element;
-use crate::web::nodelist::Nodes;
+use crate::web::element::Element;
+use crate::web::Namespace;
 
-pub struct Document(pub web_sys::Document);
+pub struct Document(web_sys::Document);
 
 impl Document {
-    pub fn new() -> Document {
-        let w = web_sys::window().expect("no global `window` exists");
-        let d = w.document().expect("should have a document on window");
-        Document(d)
-    }
-}
-
-impl super::Selection for Document {
-    fn select(&self, s: &str) -> Option<Element> {
-        Some(Element::from(self.0.query_selector(s).unwrap().unwrap()))
+    pub fn new() -> Option<Document> {
+        let win = web_sys::window().unwrap();
+        let doc = win.document().unwrap();
+        Some(Document(doc))
     }
 
-    fn select_all(&self, _s: &str) -> Option<Nodes> {
-        unimplemented!()
-    }
-
-    fn append(&self, s: &str) -> Option<Element> {
-        let e = Element::new(s);
-
+    pub fn body(&self) -> Option<Element> {
+        // web_sys::HtmlElement converted into web_sys::Element via .dyn_into::<T>()
         Some(Element::from(
             self.0
-                .append_child(&e.0)
+                .body()
                 .unwrap()
                 .dyn_into::<web_sys::Element>()
                 .unwrap(),
         ))
+    }
+
+    pub fn create(&self, name: &str, ns: Option<Namespace>) -> Element {
+        match ns {
+            Some(XHTML) => {
+                Element::from(self.0
+                  .create_element_ns(Some("http://www.w3.org/1999/xhtml"), name)
+                  .unwrap())
+            }
+            Some(SVG) => {
+                Element::from(self.0
+                  .create_element_ns(Some("http://www.w3.org/2000/svg"), name)
+                  .unwrap())
+            }
+            None => {
+                Element::from(self.0
+                  .create_element(name)
+                  .unwrap())
+            }
+        }
+    }
+
+    pub fn select(&self, selector: &str) -> Option<Element> {
+        Some(Element::from(
+            self.0
+              .query_selector(selector).unwrap().unwrap()))
     }
 }

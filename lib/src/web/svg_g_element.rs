@@ -1,31 +1,18 @@
-use crate::web::BasicElement;
-use crate::web::SvgElement;
+use crate::web::document::Document;
+use crate::web::element::Element;
+use crate::web::Namespace::SVG;
 
-pub struct SvgGElement(pub web_sys::Element);
+pub struct SvgGElement(web_sys::SvggElement);
 
 impl SvgGElement {
-    pub fn new() -> SvgGElement {
-        let mut e = SvgElement::new("g");
-        SvgGElement(e.0)
+    pub fn new() -> Self {
+        let doc = Document::new().unwrap();
+        SvgGElement::from(doc.create("g", Some(SVG)))
     }
 }
 
-impl BasicElement for SvgGElement {
-  fn id(&self) -> String {
-    self.0.id()
-  }
-  
-  fn set_id(&self, id: &str) -> &Self {
-    self.0.set_id(id);
-    self
-  }
-  
-  fn class(&self) -> String {
-    self.0.class_name()
-  }
-  
-  fn set_class(&self, class: &str) -> &Self {
-    self.0.set_class_name(class);
-    self
-  }
+impl From<Element> for SvgGElement {
+    fn from(element: Element) -> Self {
+        SvgGElement(element.into())
+    }
 }

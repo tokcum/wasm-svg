@@ -6,39 +6,44 @@ use crate::web::Document;
 use crate::web::Element;
 use crate::web::Nodes;
 
-
 // Creating a new type in a tuple struct with just one field thus
 // being a thin wrapper around the type.
-pub struct SvgCircleElement(web_sys::Element);
+pub struct SvgCircleElement(web_sys::SvgCircleElement);
 
 impl SvgCircleElement {
     pub fn new(cx: f32, cy: f32, r: f32) -> SvgCircleElement {
         let d = Document::new();
-        let e = SvgCircleElement(d.0.create_element_ns(Some("http://www.w3.org/2000/svg"), "circle").unwrap());
+        let e = SvgCircleElement(
+            d.0.create_element_ns(Some("http://www.w3.org/2000/svg"), "circle")
+                .unwrap(),
+        );
         e.0.set_attribute("cx", format!("{}", cx).as_str()).unwrap();
         e.0.set_attribute("cy", format!("{}", cy).as_str()).unwrap();
         e.0.set_attribute("r", format!("{}", r).as_str()).unwrap();
+        println!("{}", e.0.get_total_length());
         e
     }
-    /*pub fn new(n: web_sys::SvgCircleElement) -> SvgCircleElement {
-        SvgCircleElement(n)
-    }*/
 }
 
 impl Selection for SvgCircleElement {
-    fn select (&self, s: &str) -> Option<Element> {
+    fn select(&self, s: &str) -> Option<Element> {
         Some(Element::from(self.0.query_selector(s).unwrap().unwrap()))
     }
-  
-  fn select_all(&self, _s: &str) -> Option<Nodes> {
-    unimplemented!()
-  }
-  
-  
-  fn append(&self, s: &str) -> Option<Element> {
+
+    fn select_all(&self, _s: &str) -> Option<Nodes> {
+        unimplemented!()
+    }
+
+    fn append(&self, s: &str) -> Option<Element> {
         let e = Element::new(s);
-        
-        Some(Element::from(self.0.append_child(&e.0).unwrap().dyn_into::< web_sys::Element >().unwrap()))
+
+        Some(Element::from(
+            self.0
+                .append_child(&e.0)
+                .unwrap()
+                .dyn_into::<web_sys::Element>()
+                .unwrap(),
+        ))
     }
 }
 

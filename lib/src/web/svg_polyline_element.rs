@@ -1,4 +1,4 @@
-pub struct SvgPolylineElement(pub web_sys::SvgPolylineElement);
+pub struct SvgPolylineElement(web_sys::SvgPolylineElement);
 
 /*
 impl SvgPolylineElement {

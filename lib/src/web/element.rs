@@ -1,73 +1,28 @@
 use wasm_bindgen::JsCast;
 
 use crate::geometry::Circle;
-use crate::svg::SvgElement;
+use crate::web::SvgElement;
 use crate::web::document::*;
 use crate::web::nodelist::Nodes;
 use std::f64::consts::PI;
 use crate::web::SvgCanvas;
 use crate::web::SvgGElement;
 
-pub struct Element(pub web_sys::Element);
+pub struct Element(web_sys::Element);
 
 impl Element {
+    pub fn new(name: &str) -> Element {
+        let doc = Document::new().unwrap();
+        doc.create(name, None)
+    }
+    
+    pub fn html(&self, s: &str) {
+        self.0.set_inner_html(s);
+    }
+    
     /*
-    fn create() -> Element {
-        let d = Document::new();
-        Element(d.0.create_element("none").unwrap())
-    }
-    */
-
-    pub fn new(node: &str) -> Element {
-        let d = Document::new();
-        Element(
-            d.0.create_element_ns(Some("http://www.w3.org/2000/svg"), node)
-                .unwrap(),
-        )
-    }
-
-    pub fn new_svg() -> Element {
-        let d = Document::new();
-        Element(
-            d.0.create_element_ns(Some("http://www.w3.org/2000/svg"), "svg")
-                .unwrap(),
-        )
-    }
-
-    pub fn new_svg_element(s: &str) -> Element {
-        let d = Document::new();
-        Element(
-            d.0.create_element_ns(Some("http://www.w3.org/2000/svg"), s)
-                .unwrap(),
-        )
-    }
-
-    pub fn append_svg(&self) -> Option<Element> {
-        let e = Element::new_svg();
-
-        Some(Element::from(
-            self.0
-                .append_child(&e.0)
-                .unwrap()
-                .dyn_into::<web_sys::Element>()
-                .unwrap(),
-        ))
-    }
-
-    pub fn append_svg_element(&self, s: &str) -> Option<Element> {
-        let e = Element::new_svg_element(s);
-
-        Some(Element::from(
-            self.0
-                .append_child(&e.0)
-                .unwrap()
-                .dyn_into::<web_sys::Element>()
-                .unwrap(),
-        ))
-    }
-
     pub fn append_svg_circle(&self, circle: &Circle) -> Option<Element> {
-        let mut e = Element::new_svg_element("circle");
+        let mut e = SvgElement::new("circle");
         e.attr("cx", format!("{}", circle.cx).as_str())
             .attr("cy", format!("{}", circle.cy).as_str())
             .attr("r", format!("{}", circle.r).as_str());
@@ -80,15 +35,17 @@ impl Element {
                 .unwrap(),
         ))
     }
+    */
 
-    pub fn append(&self, element: &SvgElement) -> Option<Element> {
+    /*
+    pub fn append(&self, element: &crate::svg::SvgElement) -> Option<SvgElement> {
         match element {
-            SvgElement::Axis(axis) => {
-                let mut e = Element::new_svg_element("g");
-                e.append(&SvgElement::Line(&axis.line()));
-                e.append(&SvgElement::Polygon(&axis.head().unwrap()));
+            crate::svg::SvgElement::Axis(axis) => {
+                let mut e = SvgElement::new("g");
+                //e.append(&crate::svg::SvgElement::Line(&axis.line()));
+                //e.append(&crate::svg::SvgElement::Polygon(&axis.head().unwrap()));
 
-                Some(Element::from(
+                Some(SvgElement::from(
                     self.0
                         .append_child(&e.0)
                         .unwrap()
@@ -96,14 +53,14 @@ impl Element {
                         .unwrap(),
                 ))
             }
-            SvgElement::Line(line) => {
-                let mut e = Element::new_svg_element("line");
+            crate::svg::SvgElement::Line(line) => {
+                let mut e = SvgElement::new("line");
                 e.attr("x1", format!("{}", line.p1().x()).as_str())
                     .attr("y1", format!("{}", line.p1().y()).as_str())
                     .attr("x2", format!("{}", line.p2().x()).as_str())
                     .attr("y2", format!("{}", line.p2().y()).as_str());
 
-                Some(Element::from(
+                Some(SvgElement::from(
                     self.0
                         .append_child(&e.0)
                         .unwrap()
@@ -111,8 +68,8 @@ impl Element {
                         .unwrap(),
                 ))
             }
-            SvgElement::Polygon(polygon) => {
-                let mut e = Element::new_svg_element("polygon");
+            crate::svg::SvgElement::Polygon(polygon) => {
+                let mut e = SvgElement::new("polygon");
 
                 let mut points = String::new();
                 for v in polygon.points().iter() {
@@ -126,7 +83,7 @@ impl Element {
                     .attr("points", points.as_str());
                     */
 
-                Some(Element::from(
+                Some(SvgElement::from(
                     self.0
                         .append_child(&e.0)
                         .unwrap()
@@ -134,8 +91,8 @@ impl Element {
                         .unwrap(),
                 ))
             }
-            SvgElement::Polyline(polyline) => {
-                let mut e = Element::new_svg_element("polyline");
+            crate::svg::SvgElement::Polyline(polyline) => {
+                let mut e = SvgElement::new("polyline");
 
                 let mut points = String::new();
                 for v in polyline.points().iter() {
@@ -146,7 +103,7 @@ impl Element {
                     .class(polyline.class().as_str())
                     .attr("points", points.as_str());
 
-                Some(Element::from(
+                Some(SvgElement::from(
                     self.0
                         .append_child(&e.0)
                         .unwrap()
@@ -154,10 +111,10 @@ impl Element {
                         .unwrap(),
                 ))
             }
-            SvgElement::String(s) => {
+            crate::svg::SvgElement::String(s) => {
                 let e = Element::new(s);
 
-                Some(Element::from(
+                Some(SvgElement::from(
                     self.0
                         .append_child(&e.0)
                         .unwrap()
@@ -167,15 +124,16 @@ impl Element {
             }
         }
     }
+    */
 
-    pub fn append_generic_element(&self, element: &Element) -> Option<Element> {
-        Some(Element::from(
+    pub fn append(&self, element: &Element) -> Element {
+        Element::from(
             self.0
                 .append_child(&element.0)
                 .unwrap()
                 .dyn_into::<web_sys::Element>()
                 .unwrap(),
-        ))
+        )
     }
 
     pub fn attr(&mut self, name: &str, value: &str) -> &mut Self {
@@ -193,15 +151,12 @@ impl Element {
         self.0.set_attribute("class", class).unwrap();
         self
     }
-
-    pub fn html(&self, s: &str) {
-        self.0.set_inner_html(s);
-    }
 }
 
+/*
 impl super::Selection for Element {
-    fn select(&self, s: &str) -> Option<Element> {
-        Some(Element::from(self.0.query_selector(s).unwrap().unwrap()))
+    fn select(&self, s: &str) -> Option<SvgElement> {
+        Some(SvgElement::from(self.0.query_selector(s).unwrap().unwrap()))
     }
 
     fn select_all(&self, s: &str) -> Option<Nodes> {
@@ -217,75 +172,34 @@ impl super::Selection for Element {
         Some(nodes)
     }
 
-    fn append(&self, s: &str) -> Option<Element> {
-        let e = Element::new(s);
+    fn append(&self, s: &str) -> Option<SvgElement> {
+        let e = SvgElement::new(s);
 
-        Some(Element::from(
+        Some(SvgElement::from(
             self.0
-                .append_child(&e.0)
+                .append_child(&e)
                 .unwrap()
-                .dyn_into::<web_sys::Element>()
-                .unwrap(),
+              .dyn_into::<web_sys::Element>()
+              .unwrap()
         ))
     }
 }
-
-pub fn arc(cx: f32, cy: f32, r: f32, b: f32) -> String {
-    format!(
-        "M {},{} m 0,{} v {} a {},{} 0 0,0 {},{} h {} a {},{} 0 0,1 {},{} Z",
-        cx,
-        cy,
-        -(r - b),
-        -b,
-        r,
-        r,
-        -r,
-        r,
-        b,
-        r - b,
-        r - b,
-        r - b,
-        -(r - b)
-    )
-}
-
-pub fn arc_alpha(cx: f64, cy: f64, r: f64, b: f64, a: f64) -> String {
-    //f.attr("d", arc_alpha(250.0, 250.0, 100.0, 3.0, 45.0).as_str())
-    //(a.cos()*(cx+r))-(cx+r)
-    //(-1.0 * w.sin()*(cy))+(cy)
-
-    // Rust calculates in Radiant not Gradiant
-    let w = a / 360.0 * 2.0 * PI;
-
-    format!(
-        "M {},{} l {},{} h {} a {},{} 0 0,1 {},{} v {} Z",
-        cx,
-        cy,
-        (r - b),
-        0,
-        b,
-        r,
-        r,
-        w.cos() * r - r,
-        w.sin() * r,
-        -b
-    )
-}
-
-impl From<SvgCanvas> for Element {
-  fn from(canvas: SvgCanvas) -> Element {
-    Element(canvas.0)
-  }
-}
-
-impl From<SvgGElement> for Element {
-  fn from(g: SvgGElement) -> Element {
-    Element(g.0)
-  }
-}
+*/
 
 impl From<web_sys::Element> for Element {
   fn from(element: web_sys::Element) -> Element {
     Element(element)
   }
+}
+
+impl Into<web_sys::SvgElement> for Element {
+    fn into(self) -> web_sys::SvgElement {
+        self.0.dyn_into::<web_sys::SvgElement>().unwrap()
+    }
+}
+
+impl Into<web_sys::SvggElement> for Element {
+    fn into(self) -> web_sys::SvggElement {
+        self.0.dyn_into::<web_sys::SvggElement>().unwrap()
+    }
 }

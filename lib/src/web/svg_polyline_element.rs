@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct SvgPolylineElement(web_sys::SvgPolylineElement);
 
 /*

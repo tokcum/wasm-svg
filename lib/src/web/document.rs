@@ -3,6 +3,7 @@ use wasm_bindgen::JsCast;
 use crate::web::element::Element;
 use crate::web::Namespace;
 
+#[derive(Debug)]
 pub struct Document(web_sys::Document);
 
 impl Document {
@@ -25,12 +26,12 @@ impl Document {
 
     pub fn create(&self, name: &str, ns: Option<Namespace>) -> Element {
         match ns {
-            Some(XHTML) => {
+            Some(Namespace::XHTML) => {
                 Element::from(self.0
                   .create_element_ns(Some("http://www.w3.org/1999/xhtml"), name)
                   .unwrap())
             }
-            Some(SVG) => {
+            Some(Namespace::SVG) => {
                 Element::from(self.0
                   .create_element_ns(Some("http://www.w3.org/2000/svg"), name)
                   .unwrap())

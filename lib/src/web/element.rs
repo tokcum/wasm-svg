@@ -1,25 +1,29 @@
 use wasm_bindgen::JsCast;
 
 use crate::geometry::Circle;
-use crate::web::SvgElement;
 use crate::web::document::*;
 use crate::web::nodelist::Nodes;
-use std::f64::consts::PI;
 use crate::web::SvgCanvas;
+use crate::web::SvgElement;
 use crate::web::SvgGElement;
+use std::f64::consts::PI;
 
 pub struct Element(web_sys::Element);
 
 impl Element {
-    pub fn new(name: &str) -> Element {
+    pub fn new(name: &str) -> Self {
         let doc = Document::new().unwrap();
         doc.create(name, None)
     }
-    
+
+    pub fn append(&self, element: &Element) {
+        self.0.append_child(&element.0);
+    }
+
     pub fn html(&self, s: &str) {
         self.0.set_inner_html(s);
     }
-    
+
     /*
     pub fn append_svg_circle(&self, circle: &Circle) -> Option<Element> {
         let mut e = SvgElement::new("circle");
@@ -126,16 +130,6 @@ impl Element {
     }
     */
 
-    pub fn append(&self, element: &Element) -> Element {
-        Element::from(
-            self.0
-                .append_child(&element.0)
-                .unwrap()
-                .dyn_into::<web_sys::Element>()
-                .unwrap(),
-        )
-    }
-
     pub fn attr(&mut self, name: &str, value: &str) -> &mut Self {
         self.0.set_attribute(name, value).unwrap();
         self
@@ -187,9 +181,15 @@ impl super::Selection for Element {
 */
 
 impl From<web_sys::Element> for Element {
-  fn from(element: web_sys::Element) -> Element {
-    Element(element)
-  }
+    fn from(element: web_sys::Element) -> Element {
+        Element(element)
+    }
+}
+
+impl From<web_sys::SvgsvgElement> for Element {
+    fn from(element: web_sys::SvgsvgElement) -> Element {
+        Element(element.dyn_into::<web_sys::Element>().unwrap())
+    }
 }
 
 impl Into<web_sys::SvgElement> for Element {
@@ -203,3 +203,17 @@ impl Into<web_sys::SvggElement> for Element {
         self.0.dyn_into::<web_sys::SvggElement>().unwrap()
     }
 }
+
+impl Into<web_sys::SvgsvgElement> for Element {
+    fn into(self) -> web_sys::SvgsvgElement {
+        self.0.dyn_into::<web_sys::SvgsvgElement>().unwrap()
+    }
+}
+
+/*
+impl From<SvgCanvas> for Element {
+  fn from(canvas: SvgCanvas) -> Self {
+    Element(canvas.into())
+  }
+}
+*/

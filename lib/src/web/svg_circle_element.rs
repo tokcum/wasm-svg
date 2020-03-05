@@ -8,6 +8,7 @@ use crate::web::Nodes;
 
 // Creating a new type in a tuple struct with just one field thus
 // being a thin wrapper around the type.
+#[derive(Debug)]
 pub struct SvgCircleElement(web_sys::SvgCircleElement);
 
 impl SvgCircleElement {

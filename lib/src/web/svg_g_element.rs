@@ -2,6 +2,7 @@ use crate::web::document::Document;
 use crate::web::element::Element;
 use crate::web::Namespace::SVG;
 
+#[derive(Debug)]
 pub struct SvgGElement(web_sys::SvggElement);
 
 impl SvgGElement {

@@ -1,6 +1,5 @@
 use wasm_bindgen::prelude::*;
-use wasm_svg_lib::svg::SvgElement;
-use wasm_svg_lib::web::{Document, Element, Selection, SvgCanvas};
+use wasm_svg_lib::web::{Document, Element};
 
 use console_error_panic_hook;
 
@@ -20,13 +19,13 @@ pub fn run() -> Result<(), JsValue> {
 
     let doc = Document::new().unwrap();
     let body = doc.body().unwrap();
-    body.append(&Element::new("p"));
-      //  .html("Hello from inside Rust WASM code base.");
+    body.append(Element::create("p"))
+        .html("Hello from inside Rust WASM code base.");
 
-    let canvas = SvgCanvas::new(w as f32, h as f32);
-  //log!("{:?}", canvas);
-  
-  log!("{:?}", body.append(&canvas));
+    //let canvas = SvgCanvas::new(w as f32, h as f32);
+    //log!("{:?}", canvas);
+
+    //log!("{:?}", body.append(&canvas));
 
     Ok(())
 }

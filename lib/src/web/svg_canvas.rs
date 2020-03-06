@@ -3,7 +3,9 @@ use crate::web::{Document, Element};
 use std::ops::Deref;
 
 #[derive(Debug)]
-pub struct SvgCanvas(web_sys::SvgsvgElement);
+pub struct SvgCanvas {
+    n: web_sys::SvgsvgElement,
+}
 
 impl SvgCanvas {
     pub fn new(width: f32, height: f32) -> Self {
@@ -27,21 +29,13 @@ impl SvgCanvas {
     }
 
     pub fn attr(mut self, name: &str, value: &str) -> Self {
-        self.0.set_attribute(name, value).unwrap();
+        self.n.set_attribute(name, value).unwrap();
         self
     }
 }
 
-impl Deref for SvgCanvas {
-    type Target = Element;
-
-    fn deref(&self) -> &Self::Target {
-      &self
-    }
-}
-
 impl From<Element> for SvgCanvas {
-    fn from(element: Element) -> Self {
-        SvgCanvas(element.into())
+    fn from(e: Element) -> Self {
+        SvgCanvas { n: e.into() }
     }
 }

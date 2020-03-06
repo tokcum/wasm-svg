@@ -1,27 +1,30 @@
 use wasm_bindgen::JsCast;
 
-use crate::geometry::Circle;
-use crate::web::document::*;
-use crate::web::nodelist::Nodes;
-use crate::web::SvgCanvas;
-use crate::web::SvgElement;
-use crate::web::SvgGElement;
-use std::f64::consts::PI;
+use crate::web::{Document, SvgCanvas};
+use std::ops::Deref;
 
-pub struct Element(web_sys::Element);
+#[derive(Debug)]
+pub struct Element {
+    n: web_sys::Element,
+}
 
 impl Element {
-    pub fn new(name: &str) -> Self {
+    pub fn create(name: &str) -> Element {
         let doc = Document::new().unwrap();
         doc.create(name, None)
     }
-
-    pub fn append(&self, element: &Element) {
-        self.0.append_child(&element.0);
+    
+    pub fn new(n: web_sys::Element) -> Element {
+        Element { n }
+    }
+    
+    pub fn append(&self, element: Element) -> Element {
+        let n = self.n.append_child(&element.n).unwrap().dyn_into::<web_sys::Element>().unwrap();
+        Element { n }
     }
 
     pub fn html(&self, s: &str) {
-        self.0.set_inner_html(s);
+        self.n.set_inner_html(s);
     }
 
     /*
@@ -131,18 +134,18 @@ impl Element {
     */
 
     pub fn attr(&mut self, name: &str, value: &str) -> &mut Self {
-        self.0.set_attribute(name, value).unwrap();
+        self.n.set_attribute(name, value).unwrap();
         self
     }
 
     pub fn id(&mut self, id: &str) -> &mut Self {
-        self.0.set_attribute("id", id).unwrap();
+        self.n.set_attribute("id", id).unwrap();
         self
     }
 
     pub fn class(&mut self, class: &str) -> &mut Self {
         // Todo: think about adding a class instead of overwriting an existing class
-        self.0.set_attribute("class", class).unwrap();
+        self.n.set_attribute("class", class).unwrap();
         self
     }
 }
@@ -180,40 +183,9 @@ impl super::Selection for Element {
 }
 */
 
-impl From<web_sys::Element> for Element {
-    fn from(element: web_sys::Element) -> Element {
-        Element(element)
-    }
-}
-
-impl From<web_sys::SvgsvgElement> for Element {
-    fn from(element: web_sys::SvgsvgElement) -> Element {
-        Element(element.dyn_into::<web_sys::Element>().unwrap())
-    }
-}
-
-impl Into<web_sys::SvgElement> for Element {
-    fn into(self) -> web_sys::SvgElement {
-        self.0.dyn_into::<web_sys::SvgElement>().unwrap()
-    }
-}
-
-impl Into<web_sys::SvggElement> for Element {
-    fn into(self) -> web_sys::SvggElement {
-        self.0.dyn_into::<web_sys::SvggElement>().unwrap()
-    }
-}
-
 impl Into<web_sys::SvgsvgElement> for Element {
     fn into(self) -> web_sys::SvgsvgElement {
-        self.0.dyn_into::<web_sys::SvgsvgElement>().unwrap()
+        self.n.dyn_into::<web_sys::SvgsvgElement>().unwrap()
     }
+    
 }
-
-/*
-impl From<SvgCanvas> for Element {
-  fn from(canvas: SvgCanvas) -> Self {
-    Element(canvas.into())
-  }
-}
-*/

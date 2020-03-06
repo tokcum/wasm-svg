@@ -1,43 +1,24 @@
 // Define web module's public interface
 pub use document::Document;
 pub use element::Element;
-pub use node::Node;
-pub use nodelist::{NodeList, Nodes};
+//pub use node::Node;
+//pub use nodelist::{NodeList, Nodes};
 pub use svg_canvas::SvgCanvas;
-pub use svg_g_element::SvgGElement;
-pub use svg_element::SvgElement;
+use std::ops::Deref;
+//pub use svg_g_element::SvgGElement;
+//pub use svg_element::SvgElement;
 
 // Define geometry's sub modules
 mod document;
 mod element;
-mod node;
-mod nodelist;
+//mod node;
+//mod nodelist;
 mod svg_canvas;
-mod svg_element;
-mod svg_g_element;
-mod svg_polyline_element;
-
-pub trait Selection {
-  fn select(&self, s: &str) -> Option<SvgElement>;
-  fn select_all(&self, s: &str) -> Option<Nodes>;
-  fn append(&self, s: &str) -> Option<SvgElement>;
-}
+//mod svg_element;
+//mod svg_g_element;
+//mod svg_polyline_element;
 
 pub enum Namespace {
-  SVG,
-  XHTML,
+    SVG,
+    XHTML,
 }
-
-/*
-pub trait Element {
-  fn id(&self) -> String;
-  
-  fn set_id(&self, id: &str) -> &Self;
-  
-  fn class(&self) -> String;
-  
-  fn set_class(&self, class: &str) -> &Self;
-  
-  fn append(&mut self, element: impl Into<dyn Element>) -> &mut Self;
-}
-*/

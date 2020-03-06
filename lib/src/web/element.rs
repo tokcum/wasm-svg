@@ -1,6 +1,6 @@
 use wasm_bindgen::JsCast;
 
-use crate::web::{Document, SvgCanvas};
+use crate::web::{Document, SvgCanvas, OldTypeWrapper, Elem};
 use std::ops::Deref;
 
 #[derive(Debug)]
@@ -182,6 +182,20 @@ impl super::Selection for Element {
     }
 }
 */
+
+impl OldTypeWrapper for Element {
+  //type OldType = web_sys::Element;
+  
+  fn get(self) -> web_sys::Element {
+    self.n
+  }
+}
+
+impl<T: OldTypeWrapper + Clone> Elem<T> for Element {
+  fn append(self, element: T) {
+    let n = self.n.append_child(&element.get()).unwrap().dyn_into::<web_sys::Element>().unwrap();
+  }
+}
 
 impl Into<web_sys::SvgsvgElement> for Element {
     fn into(self) -> web_sys::SvgsvgElement {

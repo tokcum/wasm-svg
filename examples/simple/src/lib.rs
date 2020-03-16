@@ -1,13 +1,7 @@
 use wasm_bindgen::prelude::*;
-use wasm_svg_lib::web::{Document, Element};
+use wasm_svg_lib::web::{Document, Element, SvgCanvas};
 
 use console_error_panic_hook;
-
-macro_rules! log {
-    ( $( $t:tt )* ) => {
-        web_sys::console::log_1(&format!( $( $t )* ).into());
-    }
-}
 
 // Called by our JS entry point to run the example
 #[wasm_bindgen]
@@ -22,10 +16,8 @@ pub fn run() -> Result<(), JsValue> {
     body.append(Element::create("p"))
         .html("Hello from inside Rust WASM code base.");
 
-    //let canvas = SvgCanvas::new(w as f32, h as f32);
-    //log!("{:?}", canvas);
-
-    //log!("{:?}", body.append(&canvas));
+    let canvas = SvgCanvas::new(w as f32, h as f32);
+  body.append(Element::from(canvas));
 
     Ok(())
 }

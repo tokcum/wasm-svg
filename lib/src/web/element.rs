@@ -1,6 +1,6 @@
 use wasm_bindgen::JsCast;
 
-use crate::web::{Document, SvgCanvas, OldTypeWrapper, Elem};
+use crate::web::{Document, SvgCanvas};
 use std::ops::Deref;
 
 #[derive(Debug)]
@@ -13,16 +13,21 @@ impl Element {
         let doc = Document::new().unwrap();
         doc.create(name, None)
     }
-    
+
     pub fn new(n: web_sys::Element) -> Element {
         Element { n }
     }
-    
-    pub fn append(&self, element: Element) -> Element {
-        let n = self.n.append_child(&element.n).unwrap().dyn_into::<web_sys::Element>().unwrap();
-        Element { n }
-    }
 
+    pub fn append(&self, element: Element) -> Element {
+        let n = self
+            .n
+            .append_child(&element.n)
+            .unwrap()
+            .dyn_into::<web_sys::Element>()
+            .unwrap();
+        Element{ n }
+    }
+  
     pub fn html(&self, s: &str) {
         self.n.set_inner_html(s);
     }
@@ -183,23 +188,14 @@ impl super::Selection for Element {
 }
 */
 
-impl OldTypeWrapper for Element {
-  //type OldType = web_sys::Element;
-  
-  fn get(self) -> web_sys::Element {
-    self.n
-  }
-}
-
-impl<T: OldTypeWrapper + Clone> Elem<T> for Element {
-  fn append(self, element: T) {
-    let n = self.n.append_child(&element.get()).unwrap().dyn_into::<web_sys::Element>().unwrap();
-  }
+impl From<SvgCanvas> for Element {
+    fn from(e: SvgCanvas) -> Self {
+        Element::new(e.get().dyn_into::<web_sys::Element>().unwrap())
+    }
 }
 
 impl Into<web_sys::SvgsvgElement> for Element {
     fn into(self) -> web_sys::SvgsvgElement {
         self.n.dyn_into::<web_sys::SvgsvgElement>().unwrap()
     }
-    
 }

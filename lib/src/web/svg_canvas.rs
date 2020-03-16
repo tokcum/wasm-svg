@@ -1,6 +1,5 @@
 use crate::web::Namespace::SVG;
 use crate::web::{Document, Element};
-use std::ops::Deref;
 
 #[derive(Debug)]
 pub struct SvgCanvas {
@@ -31,6 +30,10 @@ impl SvgCanvas {
     pub fn attr(mut self, name: &str, value: &str) -> Self {
         self.n.set_attribute(name, value).unwrap();
         self
+    }
+
+    pub fn get(self) -> web_sys::SvgsvgElement {
+        self.n
     }
 }
 

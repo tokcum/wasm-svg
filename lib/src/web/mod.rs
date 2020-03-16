@@ -22,21 +22,3 @@ pub enum Namespace {
     SVG,
     XHTML,
 }
-
-// Trait to access the real type behind a New Type (see new type pattern)
-trait OldTypeWrapper {
-  //type OldType;
-  //fn get(self) -> Self::OldType;
-  fn get(self) -> web_sys::Element;
-}
-
-trait Elem<T: OldTypeWrapper + Clone> {
-  fn append(self, element: T);
-}
-
-/*
-pub fn append(&self, element: Element) -> Element {
-  let n = self.n.append_child(&element.n).unwrap().dyn_into::<web_sys::Element>().unwrap();
-  Element { n }
-}
-*/

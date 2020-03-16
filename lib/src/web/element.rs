@@ -18,14 +18,14 @@ impl Element {
         Element { n }
     }
 
-    pub fn append(&self, element: Element) -> Element {
+    pub fn append<'a>(&self, element: &'a Element) -> &'a Element {
         let n = self
             .n
             .append_child(&element.n)
             .unwrap()
             .dyn_into::<web_sys::Element>()
             .unwrap();
-        Element{ n }
+        &element
     }
   
     pub fn html(&self, s: &str) {

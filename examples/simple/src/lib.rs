@@ -1,5 +1,5 @@
 use wasm_bindgen::prelude::*;
-use wasm_svg_lib::web::{Document, Element, SvgCanvas};
+use wasm_svg_lib::{d3, web};
 
 // Called by our JS entry point to run the example
 #[wasm_bindgen]
@@ -9,13 +9,11 @@ pub fn run() -> Result<(), JsValue> {
     let w: i32 = 500;
     let h: i32 = 500;
 
-    let doc = Document::new().unwrap();
-    let body = doc.body().unwrap();
-    body.append(&Element::create("p"))
-        .html("Hello from inside Rust WASM code base.");
+    let doc = d3::Doc::new(w as f32, h as f32).unwrap();
 
-    let canvas = SvgCanvas::new(w as f32, h as f32);
-    let e = body.append(&Element::from(canvas));
+    doc.document.body().unwrap().append(&web::Element::create("p")).html(format!("{:?}", doc.canvas).as_str());
+  
+  doc.document.body().unwrap().select(".test").unwrap().html(format!("{:?}", doc.document.body().unwrap().select(".test")).as_str());
 
     Ok(())
 }

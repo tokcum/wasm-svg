@@ -19,6 +19,9 @@ crate-type = ["rlib"]
 [dependencies]
 wasm-bindgen = "^0.2"
 
+# 2020-03-17 feature wasm-bindgen has to be enabled otherwise wasm execution will panick
+rand = { version = "^0.6", features = ["wasm-bindgen"] }
+
 [dependencies.web-sys]
 version = "^0.3"
 features = [

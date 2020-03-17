@@ -4,7 +4,6 @@ pub use element::Element;
 //pub use node::Node;
 //pub use nodelist::{NodeList, Nodes};
 pub use svg_canvas::SvgCanvas;
-use std::ops::Deref;
 //pub use svg_g_element::SvgGElement;
 //pub use svg_element::SvgElement;
 

@@ -1,11 +1,11 @@
 use wasm_bindgen::JsCast;
 
 use crate::web::{Document, SvgCanvas};
-use std::ops::Deref;
 
 #[derive(Debug)]
 pub struct Element {
     n: web_sys::Element,
+    class: Option<String>,
 }
 
 impl Element {
@@ -15,7 +15,7 @@ impl Element {
     }
 
     pub fn new(n: web_sys::Element) -> Element {
-        Element { n }
+        Element { n, class: None }
     }
 
     pub fn append<'a>(&self, element: &'a Element) -> &'a Element {
@@ -27,7 +27,7 @@ impl Element {
             .unwrap();
         &element
     }
-  
+
     pub fn html(&self, s: &str) {
         self.n.set_inner_html(s);
     }
@@ -152,6 +152,28 @@ impl Element {
         // Todo: think about adding a class instead of overwriting an existing class
         self.n.set_attribute("class", class).unwrap();
         self
+    }
+
+    pub fn _class(&self) -> Option<String> {
+        self.class.clone()
+    }
+
+    pub fn select(&self, s: &str) -> Option<Self> {
+        let selection = self.n.query_selector(s);
+      
+        match selection {
+            Ok(o) => match o {
+                Some(element) => Some(Element {
+                  class: Some(element.class_name()),
+                    n: element,
+                }),
+                None => None,
+            },
+            Err(e) => {
+                println!("Error");
+                None
+            }
+        }
     }
 }
 

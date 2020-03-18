@@ -4,7 +4,7 @@ use crate::web::{Document, SvgCanvas};
 
 #[derive(Debug)]
 pub struct Element {
-    n: web_sys::Element,
+    pub n: web_sys::Element,
     class: Option<String>,
 }
 

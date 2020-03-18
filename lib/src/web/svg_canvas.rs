@@ -10,16 +10,15 @@ pub struct SvgCanvas {
 }
 
 impl SvgCanvas {
-    pub fn new(width: f32, height: f32) -> Self {
+    pub fn new(width: f32, height: f32) -> Option<Self> {
         let doc = Document::new().unwrap();
 
         let mut rng = rand::thread_rng();
-        //let class = format!("c{}", rng.gen_range(0, 10000));
-      let class= "test2";
+        let class = format!("c{}", rng.gen_range(1000, 10000));
 
         let mut canvas = SvgCanvas::from(doc.create("svg", Some(SVG)));
         canvas
-            .class(class)
+            .class(class.as_str())
             .attr("width", &width.to_string())
             .attr("height", &height.to_string())
             .attr(
@@ -34,7 +33,7 @@ impl SvgCanvas {
                 .as_str(),
             );
 
-        canvas
+        Some(canvas)
     }
 
     pub fn attr(&mut self, name: &str, value: &str) -> &mut Self {

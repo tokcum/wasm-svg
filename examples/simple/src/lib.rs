@@ -1,4 +1,5 @@
 use wasm_bindgen::prelude::*;
+use wasm_svg_lib::d3::Selector;
 use wasm_svg_lib::{d3, web};
 
 // Called by our JS entry point to run the example
@@ -10,10 +11,25 @@ pub fn run() -> Result<(), JsValue> {
     let h: i32 = 500;
 
     let doc = d3::Doc::new(w as f32, h as f32).unwrap();
+    let select = Selector::ClassesOr(vec!["test", "test3"]);
 
-    doc.document.body().unwrap().append(&web::Element::create("p")).html(format!("{:?}", doc.canvas).as_str());
-  
-  doc.document.body().unwrap().select(".test").unwrap().html(format!("{:?}", doc.document.body().unwrap().select(".test")).as_str());
+    doc.document
+        .body()
+        .unwrap()
+        .append(&web::Element::create("p"))
+        .html(format!("{:?}", doc.canvas).as_str());
+
+    doc.document
+        .body()
+        .unwrap()
+        .select(".test")
+        .unwrap()
+        .html(format!("{:?}", doc.document.body().unwrap().select(".test")).as_str());
+
+    doc.select(select)
+        .unwrap()
+        .iter()
+        .for_each(|e| e.html("Test mit eigenem Selector"));
 
     Ok(())
 }
